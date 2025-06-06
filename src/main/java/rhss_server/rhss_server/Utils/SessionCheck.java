@@ -20,7 +20,7 @@ public class SessionCheck {
             this.username = username;
         }
         else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no encontrado.");
+            throw new ResponseStatusException(HttpStatusCode.valueOf(401),"No autorizado.");
         }
 
     }

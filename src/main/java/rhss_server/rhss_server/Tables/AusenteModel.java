@@ -2,6 +2,7 @@ package rhss_server.rhss_server.Tables;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +18,12 @@ public class AusenteModel {
     private boolean justificado;
     private LocalDate fecha;
     private LocalDate fecha_ausentada;
-    private int novedad_id;
+    
+    @Column(name = "novedad_id")
+    private int novedad;
+
     private int legajo;
+    private String causa;
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
@@ -26,8 +31,8 @@ public class AusenteModel {
     public void setFecha_ausentada(LocalDate fecha_ausentada) {
         this.fecha_ausentada = fecha_ausentada;
     }
-    public void setNovedad_id(int novedad_id) {
-        this.novedad_id = novedad_id;
+    public void setNovedad_id(int novedad) {
+        this.novedad = novedad;
     }
     public void setJustificado(boolean justificado) {
         this.justificado = justificado;
@@ -35,19 +40,25 @@ public class AusenteModel {
     public void setLegajo(int legajo) {
         this.legajo = legajo;
     }
+    public void setCausa(String causa) {
+        this.causa = causa;
+    }
     public LocalDate getFecha() {
         return fecha;
     }
     public LocalDate getFecha_ausentada() {
         return fecha_ausentada;
     }
-    public int getNovedad_id() {
-        return novedad_id;
+    public int getNovedad() {
+        return novedad;
     }
     public boolean getJustificado() {
         return this.justificado;
     }
     public int getLegajo() {
         return legajo;
+    }
+    public String getCausa() {
+        return causa;
     }
 }

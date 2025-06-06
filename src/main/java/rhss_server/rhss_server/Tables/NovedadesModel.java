@@ -18,8 +18,15 @@ public class NovedadesModel {
     private short legajo;
     private String causa;
     private byte empresa_id;
-    private int usuario_id;
+    private long usuario_id;
     private LocalDate fecha_creacion;
+    private String numero;
+
+    public NovedadesModel () {
+        LocalDate current = LocalDate.now();
+        final int nro = (int) Math.floor(Math.random() * 100000);
+        this.numero = nro + "-" + current.getYear() + current.getMonthValue() + current.getDayOfMonth();
+    }
 
     public void setCausa(String causa) {
         this.causa = causa;
@@ -30,7 +37,7 @@ public class NovedadesModel {
     public void setFecha_creacion(LocalDate fecha_creacion) {
         this.fecha_creacion = fecha_creacion;
     }
-    public void setUsuario_id(int usuario_id) {
+    public void setUsuario_id(long usuario_id) {
         this.usuario_id = usuario_id;
     }
     public void setLegajo(short legajo) {
@@ -50,6 +57,15 @@ public class NovedadesModel {
     }
     public String getSolicitante() {
         return solicitante;
+    }
+    public String getNumero() {
+        return numero;
+    }
+    public long getUsuario_id() {
+        return usuario_id;
+    }
+    public byte getEmpresa_id() {
+        return empresa_id;
     }
 
 }
