@@ -1,6 +1,7 @@
 package rhss_server.rhss_server.Tables;
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +20,9 @@ public class SancionModel {
     private LocalDate fecha_inicio;
     private LocalDate fecha_final;
     private String causa;
-    private int novedad_id;
+
+    @Column(name = "novedad_id")
+    private int novedad;
 
     public void setCausa(String causa) {
         this.causa = causa;
@@ -39,8 +42,8 @@ public class SancionModel {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    public void setNovedad_id(int novedad_id) {
-        this.novedad_id = novedad_id;
+    public void setNovedad_id(int novedad) {
+        this.novedad = novedad;
     }
     public String getCausa() {
         return causa;
@@ -61,6 +64,6 @@ public class SancionModel {
         return tipo;
     }
     public int getNovedad_id() {
-        return novedad_id;
+        return novedad;
     }
 }

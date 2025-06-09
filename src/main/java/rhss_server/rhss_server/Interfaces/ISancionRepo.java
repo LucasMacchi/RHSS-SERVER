@@ -6,4 +6,6 @@ import rhss_server.rhss_server.Tables.SancionModel;
 
 public interface ISancionRepo extends JpaRepository<SancionModel, Long> {
 
-    List<SancionModel> findByLegajo(long legajo);}
+    List<SancionModel> findByLegajo(long legajo);
+
+    List<SancionModel> findByNovedad(long novedad);}

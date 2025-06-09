@@ -57,6 +57,11 @@ public class SancionControllers {
         return this.service.getSancionLegajo(Long.parseLong(id));
     }
 
+    @GetMapping("/novedad/{id}")
+    public List<SancionModel> getSancionNov(@PathVariable String id) {
+        return this.service.getSancionNovedad(Long.parseLong(id));
+    }
+
     @GetMapping("/uniq/{id}")
     public SancionModel getSancionId(@PathVariable String id) {
         return this.service.getSancionId(Long.parseLong(id));

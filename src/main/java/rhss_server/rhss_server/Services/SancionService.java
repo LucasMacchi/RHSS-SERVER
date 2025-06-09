@@ -46,6 +46,11 @@ public class SancionService {
         return sanciones;
     }
 
+    public List<SancionModel> getSancionNovedad (long novedad) {
+        List<SancionModel> sanciones = SancionRepo.findByNovedad(novedad);
+        return sanciones;
+    }
+
     public SancionModel getSancionId(long id) {
         Optional<SancionModel> sancione = SancionRepo.findById(id);
         if(sancione.isPresent()) return sancione.get();
