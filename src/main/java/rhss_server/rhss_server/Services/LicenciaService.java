@@ -54,4 +54,9 @@ public class LicenciaService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Licencia no encontrada.");
         }
     }
+
+    public String[] getCategories() {
+        String[] cat = {"ART", "LICENCIA POR ENFERMEDAD", "LICENCIA POR EMBARAZO", "LICENCIA DE VACACIONES"};
+        return cat;
+    }
 }

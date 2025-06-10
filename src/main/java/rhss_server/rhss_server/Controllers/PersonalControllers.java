@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 
+
 @RestController
 @RequestMapping("/personal")
 public class PersonalControllers {
@@ -57,6 +58,12 @@ public class PersonalControllers {
     public PersonalTable getByNov(@PathVariable String id) {
         return this.service.getByNovedad(Long.parseLong(id));
     }
+
+    @GetMapping("/categories")
+    public String[] getCategories() {
+        return this.service.getCategories();
+    }
+    
     
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

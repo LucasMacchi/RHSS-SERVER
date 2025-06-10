@@ -21,6 +21,7 @@ public class NovedadesModel {
     private long usuario_id;
     private LocalDate fecha_creacion;
     private String numero;
+    private String categoria;
 
     public NovedadesModel () {
         LocalDate current = LocalDate.now();
@@ -30,6 +31,9 @@ public class NovedadesModel {
 
     public void setCausa(String causa) {
         this.causa = causa;
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
     public void setEmpresa_id(byte empresa_id) {
         this.empresa_id = empresa_id;
@@ -66,6 +70,9 @@ public class NovedadesModel {
     }
     public byte getEmpresa_id() {
         return empresa_id;
+    }
+    public String getCategoria() {
+        return categoria;
     }
 
 }

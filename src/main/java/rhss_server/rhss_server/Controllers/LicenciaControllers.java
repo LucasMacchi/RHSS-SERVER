@@ -66,6 +66,11 @@ public class LicenciaControllers {
         return this.service.getById(Long.parseLong(id));
     }
     
+    @GetMapping("/categories")
+    public String[] getCategories() {
+        return this.service.getCategories();
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -77,5 +82,7 @@ public class LicenciaControllers {
         });
         return errors;
     }
+
+
     
 }

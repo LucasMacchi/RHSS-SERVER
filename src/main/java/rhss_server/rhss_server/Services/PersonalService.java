@@ -53,7 +53,7 @@ public class PersonalService {
         }
     }
 
-        public PersonalTable getById(long id) {
+    public PersonalTable getById(long id) {
         Optional<PersonalTable> personal = PersonalRepo.findById(id);
         if(personal.isPresent()){
             return personal.get();
@@ -61,6 +61,11 @@ public class PersonalService {
         else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Informe no encontrado.");
         }
+    }
+
+    public String[] getCategories() {
+        String[] cat = {"DESPIDO", "DESPIDO UOCRA", "DESPIDO EN PERIODO DE PRUEBA", "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA"};
+        return cat;
     }
 
 }

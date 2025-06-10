@@ -22,4 +22,7 @@ public class NovedadDto {
     @NotNull(message = "Ingrese un legajo valido.")
     @Min(value = 1)
     public short legajo;
+
+    @NotEmpty(message = "Necesita una categoria valida.")
+    public String categoria;
 }

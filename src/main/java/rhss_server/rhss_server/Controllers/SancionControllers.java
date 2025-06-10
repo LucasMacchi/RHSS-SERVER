@@ -66,6 +66,11 @@ public class SancionControllers {
     public SancionModel getSancionId(@PathVariable String id) {
         return this.service.getSancionId(Long.parseLong(id));
     }
+
+    @GetMapping("/categories")
+    public String[] getCategories() {
+        return this.service.getCategories();
+    }
     
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

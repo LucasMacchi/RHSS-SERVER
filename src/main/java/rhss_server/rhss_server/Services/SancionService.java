@@ -58,6 +58,10 @@ public class SancionService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Sancion no encontrada.");
         }
     }
+    public String[] getCategories() {
+        String[] cat = {"SUSPENCION", "APERCIBIMIENTO"};
+        return cat;
+    }
 
 
 }

@@ -28,6 +28,7 @@ public class NovedadesService {
         novedad.setLegajo(data.legajo);
         novedad.setSolicitante(data.solicitante);
         novedad.setUsuario_id(data.usuario_id);
+        novedad.setCategoria(data.categoria);
         NovedadRepo.save(novedad);
         return "Novedad creada, numero "+novedad.getNumero();
     }
