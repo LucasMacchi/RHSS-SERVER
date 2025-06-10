@@ -49,7 +49,7 @@ public class PersonalService {
             return personal.get();
         }
         else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Ausente no encontrado.");
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Informe no encontrado.");
         }
     }
 
@@ -59,7 +59,7 @@ public class PersonalService {
             return personal.get();
         }
         else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Ausente no encontrado.");
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Informe no encontrado.");
         }
     }
 

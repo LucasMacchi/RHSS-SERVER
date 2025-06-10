@@ -41,7 +41,7 @@ public class NovedadesService {
         Optional<NovedadesModel> novedad = NovedadRepo.findById(novedad_id);
         if(novedad.isPresent()) return novedad.get();
         else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Ausente no encontrado.");
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Novedad no encontrada.");
         }
     }
 }

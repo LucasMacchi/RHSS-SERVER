@@ -1,6 +1,7 @@
 package rhss_server.rhss_server.Tables;
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,10 @@ public class LicenciaTable {
     private LocalDate fecha_salida;
     private LocalDate fecha_entrada;
     private String causa;
-    private int novedad_id;
+
+    @Column(name = "novedad_id")
+    private int novedad;
+
     private String categoria;
 
     public void setCategoria(String categoria) {
@@ -39,8 +43,8 @@ public class LicenciaTable {
     public void setLegajo(int legajo) {
         this.legajo = legajo;
     }
-    public void setNovedad_id(int novedad_id) {
-        this.novedad_id = novedad_id;
+    public void setNovedad(int novedad) {
+        this.novedad = novedad;
     }
     public String getCategoria() {
         return categoria;
@@ -63,7 +67,7 @@ public class LicenciaTable {
     public long getLicencia_id() {
         return licencia_id;
     }
-    public int getNovedad_id() {
-        return novedad_id;
+    public int getNovedad() {
+        return novedad;
     }
 }

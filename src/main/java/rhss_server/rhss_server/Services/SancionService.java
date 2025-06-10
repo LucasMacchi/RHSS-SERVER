@@ -55,7 +55,7 @@ public class SancionService {
         Optional<SancionModel> sancione = SancionRepo.findById(id);
         if(sancione.isPresent()) return sancione.get();
         else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Ausente no encontrado.");
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Sancion no encontrada.");
         }
     }
 
