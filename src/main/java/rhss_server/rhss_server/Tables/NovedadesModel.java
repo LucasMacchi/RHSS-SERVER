@@ -2,6 +2,7 @@ package rhss_server.rhss_server.Tables;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +20,8 @@ public class NovedadesModel {
     private String causa;
     private byte empresa_id;
     private long usuario_id;
-    private LocalDate fecha_creacion;
+    @Column(name = "fecha_creacion")
+    private LocalDate fecha;
     private String numero;
     private String categoria;
 
@@ -38,8 +40,8 @@ public class NovedadesModel {
     public void setEmpresa_id(byte empresa_id) {
         this.empresa_id = empresa_id;
     }
-    public void setFecha_creacion(LocalDate fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
+    public void setFecha_creacion(LocalDate fecha) {
+        this.fecha = fecha;
     }
     public void setUsuario_id(long usuario_id) {
         this.usuario_id = usuario_id;
@@ -53,8 +55,8 @@ public class NovedadesModel {
     public String getCausa() {
         return causa;
     }
-    public LocalDate getFecha_creacion() {
-        return fecha_creacion;
+    public LocalDate getFecha() {
+        return fecha;
     }
     public short getLegajo() {
         return legajo;
@@ -73,6 +75,9 @@ public class NovedadesModel {
     }
     public String getCategoria() {
         return categoria;
+    }
+    public long getNovedad_id() {
+        return novedad_id;
     }
 
 }

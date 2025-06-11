@@ -25,6 +25,7 @@ import jakarta.validation.Valid;
 import rhss_server.rhss_server.DTOs.RegisterUserDto;
 import rhss_server.rhss_server.Services.UserService;
 import rhss_server.rhss_server.Tables.UsuarioModel;
+import rhss_server.rhss_server.Utils.SessionCheck;
 
 
 @RestController
@@ -35,15 +36,15 @@ public class UserControllers {
     @Autowired
     private UserService service;
 
-    @GetMapping("/login/{username}")
+    @PostMapping("/login/{username}")
     public String login(@PathVariable String username, HttpSession session) {
         return this.service.loginSession(username, session);
     }
-    @GetMapping("/session")
-    public String getSession(HttpSession session) {
+    @PostMapping("/session")
+    public SessionCheck getSession(HttpSession session) {
         return this.service.getSession(session);
     }
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public String logout(HttpSession session) {
         return this.service.logOutSession(session);
     }

@@ -91,10 +91,14 @@ public class UserService {
         }
     }
 
-    public String getSession (HttpSession session) {
-        SessionCheck newSession = new SessionCheck(session);
-        return newSession.username + " " + newSession.admin + " " + newSession.administrativo;
-        
+    public SessionCheck getSession (HttpSession session) {
+        try {
+            SessionCheck newSession = new SessionCheck(session);
+            return newSession;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario sin sesion.");
+        }
+
     }
 
     public String logOutSession (HttpSession session) {

@@ -53,6 +53,11 @@ public class NovedadControllers {
     public NovedadesModel getMethodName(@PathVariable String id) {
         return this.service.getNov(Long.parseLong(id));
     }
+
+    @GetMapping("/today")
+    public List<NovedadesModel> getNovedadesToday() {
+        return this.service.getTodayNov();
+    }
     
     
     

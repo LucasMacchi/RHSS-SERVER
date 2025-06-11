@@ -38,11 +38,17 @@ public class NovedadesService {
         return novedades;
     }
 
-        public NovedadesModel getNov (long novedad_id) {
+    public NovedadesModel getNov (long novedad_id) {
         Optional<NovedadesModel> novedad = NovedadRepo.findById(novedad_id);
         if(novedad.isPresent()) return novedad.get();
         else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Novedad no encontrada.");
         }
     }
+    public List<NovedadesModel> getTodayNov () {
+        LocalDate current = LocalDate.now();
+        List<NovedadesModel> novedades = NovedadRepo.findByFecha(current);
+        return novedades;
+    }
+
 }
