@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.DTOs.NovedadDto;
+import rhss_server.rhss_server.DTOs.NovedadFilterDto;
 import rhss_server.rhss_server.Services.NovedadesService;
 import rhss_server.rhss_server.Tables.NovedadesModel;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -44,9 +44,9 @@ public class NovedadControllers {
         return this.service.postNovedad(data);
     }
 
-    @GetMapping("/all")
-    public List<NovedadesModel> getAllNovedades() {
-        return this.service.getAllNov();
+    @PostMapping("/all")
+    public List<NovedadesModel> getAllNovedades(@Valid @RequestBody NovedadFilterDto data) {
+        return this.service.getAllNov(data);
     }
 
     @GetMapping("/uniq/{id}")
@@ -54,13 +54,20 @@ public class NovedadControllers {
         return this.service.getNov(Long.parseLong(id));
     }
 
+    @GetMapping("/nro/{nro}")
+    public List<NovedadesModel> getByNro(@PathVariable String nro) {
+        return this.service.getNroNov(nro);
+    }
+    
     @GetMapping("/today")
     public List<NovedadesModel> getNovedadesToday() {
         return this.service.getTodayNov();
     }
-    
-    
-    
+
+    @GetMapping("/categories")
+    public String[] getCategories() {
+        return this.service.getCategories();
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

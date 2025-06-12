@@ -53,7 +53,7 @@ public class UserControllers {
         LocalDateTime current = LocalDateTime.now();
         return "User Route pinged at "+current;
     }
-    @GetMapping("/all/usuarios")
+    @GetMapping("/all")
     public List<UsuarioModel> getAllUsuarios () {
         return this.service.getAllUsuarios();
     }

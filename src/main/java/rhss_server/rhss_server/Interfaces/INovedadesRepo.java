@@ -8,4 +8,6 @@ import rhss_server.rhss_server.Tables.NovedadesModel;
 
 public interface INovedadesRepo extends JpaRepository<NovedadesModel, Long> {
 
-    List<NovedadesModel> findByFecha(LocalDate current);}
+    List<NovedadesModel> findByFecha(LocalDate current);
+
+    List<NovedadesModel> findByNumero(String nro);}
