@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import rhss_server.rhss_server.Utils.dateShorter;
 
 @Entity
 @Table(name = "glpi_rhss_novedad", schema = "rrhh")
@@ -27,8 +28,10 @@ public class NovedadesModel {
 
     public NovedadesModel () {
         LocalDate current = LocalDate.now();
+        String dateShrt = new dateShorter(current).getMonth();
         final int nro = (int) Math.floor(Math.random() * 100000);
-        this.numero = nro + "-" + current.getYear() + current.getMonthValue() + current.getDayOfMonth();
+        
+        this.numero = nro + "-" + dateShrt;
     }
 
     public void setCausa(String causa) {

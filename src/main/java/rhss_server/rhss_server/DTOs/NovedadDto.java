@@ -11,13 +11,7 @@ public class NovedadDto {
     @NotEmpty(message = "Ingrese un Solicitante.")
     public String solicitante;
 
-    @NotNull(message = "Ingrese una Empresa valida.")
-    @Min(value = 1)
     public byte empresa_id;
-
-    @NotNull(message = "Ingrese un usuario valido.")
-    @Min(value = 1)
-    public long usuario_id;
 
     @NotNull(message = "Ingrese un legajo valido.")
     @Min(value = 1)

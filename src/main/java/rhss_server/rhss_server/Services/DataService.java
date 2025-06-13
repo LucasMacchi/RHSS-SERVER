@@ -1,6 +1,8 @@
 package rhss_server.rhss_server.Services;
 import rhss_server.rhss_server.Interfaces.IEmpresasRepo;
+import rhss_server.rhss_server.Interfaces.ILegajoRepo;
 import rhss_server.rhss_server.Tables.EmpresaModel;
+import rhss_server.rhss_server.Tables.LegajosTable;
 import rhss_server.rhss_server.DTOs.EmpresaDto;
 import java.util.List;
 
@@ -12,6 +14,8 @@ public class DataService {
 
     @Autowired
     private IEmpresasRepo EmpresaRepo;
+    @Autowired
+    private ILegajoRepo LegajoRepo;
 
     public List<EmpresaModel> getAllEmpresas () {
         List<EmpresaModel> empresas = EmpresaRepo.findAll();
@@ -23,6 +27,17 @@ public class DataService {
         newEmpresa.setNombre(body.nombre);
         EmpresaRepo.save(newEmpresa);
         return String.format("Empresa %s Creada",body.nombre);
+    }
+
+        public List<LegajosTable> getAllLegajos () {
+        List<LegajosTable> legajos = LegajoRepo.findAll();
+        return legajos;
+    }
+
+
+    public List<LegajosTable> getLegajos (String nombre) {
+        List<LegajosTable> legajos = LegajoRepo.findByFullnameContaining(nombre);
+        return legajos;
     }
 
 }

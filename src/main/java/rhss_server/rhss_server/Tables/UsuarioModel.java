@@ -89,5 +89,8 @@ public class UsuarioModel {
     public void setActivado(boolean activado) {
         this.activado = activado;
     }
+    public long getUsuario_id() {
+        return usuario_id;
+    }
 
 }

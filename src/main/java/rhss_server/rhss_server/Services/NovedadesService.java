@@ -15,26 +15,42 @@ import org.springframework.web.server.ResponseStatusException;
 import rhss_server.rhss_server.DTOs.NovedadDto;
 import rhss_server.rhss_server.DTOs.NovedadFilterDto;
 import rhss_server.rhss_server.Interfaces.INovedadesRepo;
+import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
 import rhss_server.rhss_server.Tables.NovedadesModel;
+import rhss_server.rhss_server.Tables.UsuarioModel;
 
 @Service
 public class NovedadesService {
     
     @Autowired
     private INovedadesRepo NovedadRepo;
+    @Autowired
+    private IUsuarioRepo UsuarioRepo;
 
     public String postNovedad (NovedadDto data) {
         LocalDate current = LocalDate.now();
         NovedadesModel novedad = new NovedadesModel();
-        novedad.setCausa(data.causa);
-        novedad.setEmpresa_id(data.empresa_id);
-        novedad.setFecha_creacion(current);
-        novedad.setLegajo(data.legajo);
-        novedad.setSolicitante(data.solicitante);
-        novedad.setUsuario_id(data.usuario_id);
-        novedad.setCategoria(data.categoria);
-        NovedadRepo.save(novedad);
-        return "Novedad creada, numero "+novedad.getNumero();
+        Optional<UsuarioModel> user = UsuarioRepo.findByUsername(data.solicitante);
+        if(user.isPresent()) {
+            novedad.setCausa(data.causa);
+            if(data.empresa_id == 0) {
+                novedad.setEmpresa_id(user.get().getEmpresa_id());
+            }
+            else {
+                novedad.setEmpresa_id(data.empresa_id);
+            }
+            novedad.setFecha_creacion(current);
+            novedad.setLegajo(data.legajo);
+            novedad.setSolicitante(data.solicitante);
+            novedad.setUsuario_id(user.get().getUsuario_id());
+            novedad.setCategoria(data.categoria);
+            NovedadRepo.save(novedad);
+            return "Novedad creada, numero "+novedad.getNumero();
+        }
+        else {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no encontrada.");
+        }
+
     }
 
     public List<NovedadesModel> getAllNov (NovedadFilterDto data) {
