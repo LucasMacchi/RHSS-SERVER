@@ -10,4 +10,6 @@ public interface INovedadesRepo extends JpaRepository<NovedadesModel, Long> {
 
     List<NovedadesModel> findByFecha(LocalDate current);
 
-    List<NovedadesModel> findByNumero(String nro);}
+    List<NovedadesModel> findByNumero(String nro);
+
+    List<NovedadesModel> findByLegajo(Long legajo);}

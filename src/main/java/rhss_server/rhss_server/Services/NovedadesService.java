@@ -14,10 +14,21 @@ import org.springframework.web.server.ResponseStatusException;
 
 import rhss_server.rhss_server.DTOs.NovedadDto;
 import rhss_server.rhss_server.DTOs.NovedadFilterDto;
+import rhss_server.rhss_server.Interfaces.IAusenteRepo;
+import rhss_server.rhss_server.Interfaces.ILegajoRepo;
+import rhss_server.rhss_server.Interfaces.ILicenciaRepo;
 import rhss_server.rhss_server.Interfaces.INovedadesRepo;
+import rhss_server.rhss_server.Interfaces.IPersonalRepo;
+import rhss_server.rhss_server.Interfaces.ISancionRepo;
 import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
+import rhss_server.rhss_server.Tables.AusenteModel;
+import rhss_server.rhss_server.Tables.LegajosTable;
+import rhss_server.rhss_server.Tables.LicenciaTable;
 import rhss_server.rhss_server.Tables.NovedadesModel;
+import rhss_server.rhss_server.Tables.PersonalTable;
+import rhss_server.rhss_server.Tables.SancionModel;
 import rhss_server.rhss_server.Tables.UsuarioModel;
+import rhss_server.rhss_server.Utils.NovLegajo;
 
 @Service
 public class NovedadesService {
@@ -26,6 +37,16 @@ public class NovedadesService {
     private INovedadesRepo NovedadRepo;
     @Autowired
     private IUsuarioRepo UsuarioRepo;
+    @Autowired
+    private ILegajoRepo LegajoRepo;
+    @Autowired
+    private ISancionRepo SancionRepo;
+    @Autowired
+    private IAusenteRepo AusenteRepo;
+    @Autowired
+    private ILicenciaRepo LicenciaRepo;
+    @Autowired
+    private IPersonalRepo PersonalRepo;
 
     public String postNovedad (NovedadDto data) {
         LocalDate current = LocalDate.now();
@@ -78,9 +99,17 @@ public class NovedadesService {
         return novedadesF;
     }
 
-    public NovedadesModel getNov (long novedad_id) {
+    public NovLegajo getNov (long novedad_id) {
         Optional<NovedadesModel> novedad = NovedadRepo.findById(novedad_id);
-        if(novedad.isPresent()) return novedad.get();
+        List<SancionModel> sanciones = SancionRepo.findByNovedad(novedad_id);
+        List<PersonalTable> personal = PersonalRepo.findByNovedad(novedad_id);
+        List<LicenciaTable> licencias = LicenciaRepo.findByNovedad(novedad_id);
+        List<AusenteModel> ausentes = AusenteRepo.findByNovedad(novedad_id);
+        if(novedad.isPresent()) {
+            Optional<LegajosTable> leg = LegajoRepo.findById(novedad.get().getLegajo());
+            NovLegajo novleg = new NovLegajo(leg.get(), novedad.get(),ausentes,sanciones,personal,licencias);
+            return novleg;
+        }
         else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Novedad no encontrada.");
         }
@@ -97,10 +126,17 @@ public class NovedadesService {
         return novedades;
     }
 
+
+    public List<NovedadesModel> getLegNov (Long legajo) {
+        List<NovedadesModel> novedades = NovedadRepo.findByLegajo(legajo);
+        return novedades;
+    }
+
+
     public String[] getCategories () {
         String[] cat = {"SUSPENCION", "APERCIBIMIENTO", "ART", "LICENCIA POR ENFERMEDAD", 
         "LICENCIA POR EMBARAZO", "LICENCIA DE VACACIONES","DESPIDO", "DESPIDO UOCRA", "DESPIDO EN PERIODO DE PRUEBA", 
-        "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA"};
+        "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA","AUSENTE"};
         return cat;
     }
 

@@ -55,7 +55,7 @@ public class PersonalControllers {
     }
 
     @GetMapping("/novedad/{id}")
-    public PersonalTable getByNov(@PathVariable String id) {
+    public List<PersonalTable> getByNov(@PathVariable String id) {
         return this.service.getByNovedad(Long.parseLong(id));
     }
 

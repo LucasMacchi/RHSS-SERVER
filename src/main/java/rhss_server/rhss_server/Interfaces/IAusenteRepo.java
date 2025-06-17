@@ -10,5 +10,5 @@ public interface IAusenteRepo extends JpaRepository<AusenteModel, Long> {
 
     List<AusenteModel> findByLegajo(int legajo);
 
-    List<AusenteModel> findByNovedad(int novedad);
+    List<AusenteModel> findByNovedad(long novedad);
 }

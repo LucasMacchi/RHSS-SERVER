@@ -22,6 +22,8 @@ import rhss_server.rhss_server.DTOs.NovedadDto;
 import rhss_server.rhss_server.DTOs.NovedadFilterDto;
 import rhss_server.rhss_server.Services.NovedadesService;
 import rhss_server.rhss_server.Tables.NovedadesModel;
+import rhss_server.rhss_server.Utils.NovLegajo;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -50,8 +52,13 @@ public class NovedadControllers {
     }
 
     @GetMapping("/uniq/{id}")
-    public NovedadesModel getMethodName(@PathVariable String id) {
+    public NovLegajo getUniqNov(@PathVariable String id) {
         return this.service.getNov(Long.parseLong(id));
+    }
+
+    @GetMapping("/legajo/{legajo}")
+    public List<NovedadesModel> getNovByLegajo(@PathVariable String legajo) {
+        return this.service.getLegNov(Long.parseLong(legajo));
     }
 
     @GetMapping("/nro/{nro}")

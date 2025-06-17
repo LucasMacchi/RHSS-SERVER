@@ -43,14 +43,9 @@ public class PersonalService {
         return informes;
     }
 
-    public PersonalTable getByNovedad (long novedad) {
-        Optional<PersonalTable> personal = PersonalRepo.findByNovedad(novedad);
-        if(personal.isPresent()){
-            return personal.get();
-        }
-        else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Informe no encontrado.");
-        }
+    public List<PersonalTable> getByNovedad (long novedad) {
+        List<PersonalTable> personal = PersonalRepo.findByNovedad(novedad);
+        return personal;
     }
 
     public PersonalTable getById(long id) {
