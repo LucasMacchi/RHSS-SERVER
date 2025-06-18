@@ -79,12 +79,16 @@ public class UserService {
     public String loginSession (String username, HttpSession session) {
         Optional<UsuarioModel> user = UsuarioRepo.findByUsername(username);
         if(user.isPresent()) {
-            session.setAttribute("username", user.get().getUsername());
-            session.setAttribute("admin", user.get().getAdmin());
-            session.setAttribute("administrativo", user.get().getAdministrativo());
-            String sessionId = session.getId();
-            return sessionId;
-
+            if(user.get().getActivado()) {
+                session.setAttribute("username", user.get().getUsername());
+                session.setAttribute("admin", user.get().getAdmin());
+                session.setAttribute("administrativo", user.get().getAdministrativo());
+                String sessionId = session.getId();
+                return sessionId;
+            }
+            else {
+                throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no activado.");
+            }
         }
         else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no encontrado.");

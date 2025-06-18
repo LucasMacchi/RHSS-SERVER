@@ -54,23 +54,28 @@ public class UserControllers {
         return "User Route pinged at "+current;
     }
     @GetMapping("/all")
-    public List<UsuarioModel> getAllUsuarios () {
+    public List<UsuarioModel> getAllUsuarios (HttpSession session) {
+        new SessionCheck(session);
         return this.service.getAllUsuarios();
     }
     @GetMapping("/uniq/{id}")
-    public UsuarioModel getUser (@PathVariable String id) {
+    public UsuarioModel getUser (@PathVariable String id,HttpSession session) {
+        new SessionCheck(session);
         return this.service.getUniqUser(id);
     }
     @PostMapping("/registrar")
-    public String registerUser (@Valid @RequestBody RegisterUserDto data) {
+    public String registerUser (@Valid @RequestBody RegisterUserDto data,HttpSession session) {
+        new SessionCheck(session).checkAdmin();;
         return this.service.registerUser(data);
     }
     @PatchMapping("/activate/{id}")
-    public String actiaveUser (@PathVariable String id) {
+    public String actiaveUser (@PathVariable String id,HttpSession session) {
+        new SessionCheck(session).checkAdmin();;
         return this.service.activateUser(id);
     }
     @PatchMapping("/deactivate/{id}")
-    public String deactiaveUser (@PathVariable String id) {
+    public String deactiaveUser (@PathVariable String id,HttpSession session) {
+        new SessionCheck(session).checkAdmin();
         return this.service.deactivateUser(id);
     }
     

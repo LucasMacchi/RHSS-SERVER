@@ -25,7 +25,7 @@ public class AusenteService {
         ausente.setCausa(data.causa);
         ausente.setFecha(current);
         ausente.setFecha_ausentada(data.fecha_ausente);
-        ausente.setJustificado(false);
+        ausente.setJustificado(data.justificado);
         ausente.setLegajo(data.legajo);
         ausente.setNovedad_id(data.novedad_id);
         AusenteRepo.save(ausente);

@@ -24,5 +24,9 @@ public class SessionCheck {
         }
 
     }
+
+    public void checkAdmin () {
+        if(!this.admin) throw new ResponseStatusException(HttpStatusCode.valueOf(401),"No autorizado.");
+    }
     
 }

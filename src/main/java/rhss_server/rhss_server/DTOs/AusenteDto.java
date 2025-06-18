@@ -20,4 +20,6 @@ public class AusenteDto {
     @NotNull(message = "Es necesario un legajo.")
     @Min(value = 1)
     public short legajo;
+
+    public boolean justificado;
 }
