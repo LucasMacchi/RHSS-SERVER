@@ -59,10 +59,11 @@ public class DataService {
             System.out.println("DIR: "+dir.getAbsolutePath());
             if(!dir.exists()) {
                 Boolean res = dir.mkdir();
-                System.out.println("PASO 3: "+res);
+                System.out.println("DIRCTORY CREATED: "+res);
             }
                 Path filepPath = Paths.get(pathToSave, file.getOriginalFilename());
                 Files.write(filepPath, file.getBytes());
+                System.out.println("FILE SAVED");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"No se pudo cargar el archivo.");
         }
