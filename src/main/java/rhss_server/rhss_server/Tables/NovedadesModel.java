@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import rhss_server.rhss_server.Utils.dateShorter;
 
 @Entity
-@Table(name = "glpi_rhss_novedad", schema = "rrhh")
+@Table(name = "glpi_rhss_novedad")
 public class NovedadesModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

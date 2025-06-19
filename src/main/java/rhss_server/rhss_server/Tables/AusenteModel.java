@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "glpi_rhss_ausente", schema = "rrhh")
+@Table(name = "glpi_rhss_ausente")
 public class AusenteModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

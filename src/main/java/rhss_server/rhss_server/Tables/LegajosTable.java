@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "glpi_rhss_legajos", schema = "rrhh")
+@Table(name = "glpi_rhss_legajos")
 public class LegajosTable {
     
     @Id
