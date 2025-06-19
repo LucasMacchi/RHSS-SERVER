@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpSession;
 import rhss_server.rhss_server.DTOs.PersonalDto;
 import rhss_server.rhss_server.Services.PersonalService;
 import rhss_server.rhss_server.Tables.PersonalTable;
+import rhss_server.rhss_server.Utils.SessionCheck;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,27 +40,32 @@ public class PersonalControllers {
     }
 
     @PostMapping("/create")
-    public String createPersonal(@RequestBody PersonalDto data) {
+    public String createPersonal(@RequestBody PersonalDto data,HttpSession session) {
+        new SessionCheck(session);
         return this.service.postPersonal(data);
     }
 
     @GetMapping("/all")
-    public List<PersonalTable> getAllPers() {
+    public List<PersonalTable> getAllPers(HttpSession session) {
+        new SessionCheck(session);
         return this.service.getAllPersonal();
     }
 
     @GetMapping("/legajo/{legajo}")
-    public List<PersonalTable> getByLegajo(@PathVariable String legajo) {
+    public List<PersonalTable> getByLegajo(@PathVariable String legajo,HttpSession session) {
+        new SessionCheck(session);
         return this.service.getByLegajo(Integer.parseInt(legajo));
     }
 
     @GetMapping("/novedad/{id}")
-    public List<PersonalTable> getByNov(@PathVariable String id) {
+    public List<PersonalTable> getByNov(@PathVariable String id,HttpSession session) {
+        new SessionCheck(session);
         return this.service.getByNovedad(Long.parseLong(id));
     }
 
     @GetMapping("/categories")
-    public String[] getCategories() {
+    public String[] getCategories(HttpSession session) {
+        new SessionCheck(session);
         return this.service.getCategories();
     }
     

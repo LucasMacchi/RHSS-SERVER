@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.DTOs.NovedadDto;
 import rhss_server.rhss_server.DTOs.NovedadFilterDto;
 import rhss_server.rhss_server.Services.NovedadesService;
 import rhss_server.rhss_server.Tables.NovedadesModel;
 import rhss_server.rhss_server.Utils.NovLegajo;
+import rhss_server.rhss_server.Utils.SessionCheck;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,37 +44,44 @@ public class NovedadControllers {
     }
     
     @PostMapping("/create")
-    public String createNovedad(@Valid @RequestBody NovedadDto data) {
+    public String createNovedad(@Valid @RequestBody NovedadDto data,HttpSession session) {
+        new SessionCheck(session);
         return this.service.postNovedad(data);
     }
 
     @PostMapping("/all")
-    public List<NovedadesModel> getAllNovedades(@Valid @RequestBody NovedadFilterDto data) {
+    public List<NovedadesModel> getAllNovedades(@Valid @RequestBody NovedadFilterDto data,HttpSession session) {
+        new SessionCheck(session);
         return this.service.getAllNov(data);
     }
 
     @GetMapping("/uniq/{id}")
-    public NovLegajo getUniqNov(@PathVariable String id) {
+    public NovLegajo getUniqNov(@PathVariable String id,HttpSession session) {
+        new SessionCheck(session);
         return this.service.getNov(Long.parseLong(id));
     }
 
     @GetMapping("/legajo/{legajo}")
-    public List<NovedadesModel> getNovByLegajo(@PathVariable String legajo) {
+    public List<NovedadesModel> getNovByLegajo(@PathVariable String legajo,HttpSession session) {
+        new SessionCheck(session);
         return this.service.getLegNov(Long.parseLong(legajo));
     }
 
     @GetMapping("/nro/{nro}")
-    public List<NovedadesModel> getByNro(@PathVariable String nro) {
+    public List<NovedadesModel> getByNro(@PathVariable String nro,HttpSession session) {
+        new SessionCheck(session);
         return this.service.getNroNov(nro);
     }
     
     @GetMapping("/today")
-    public List<NovedadesModel> getNovedadesToday() {
+    public List<NovedadesModel> getNovedadesToday(HttpSession session) {
+        new SessionCheck(session);
         return this.service.getTodayNov();
     }
 
     @GetMapping("/categories")
-    public String[] getCategories() {
+    public String[] getCategories(HttpSession session) {
+        new SessionCheck(session);
         return this.service.getCategories();
     }
 
