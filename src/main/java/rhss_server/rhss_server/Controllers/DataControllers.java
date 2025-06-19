@@ -35,7 +35,6 @@ import java.util.Map;
 @Validated
 public class DataControllers {
 
-    
     @Autowired
     private DataService service;
 
