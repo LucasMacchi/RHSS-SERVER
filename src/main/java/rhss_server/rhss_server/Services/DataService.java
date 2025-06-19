@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;;
 @Service
 public class DataService {
 
-    @Value("${PATH_SAVE_FILES}")
+    @Value("${RAILWAY_VOLUME_MOUNT_PATH}")
     private String pathToSave;
     @Autowired
     private IEmpresasRepo EmpresaRepo;
