@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "glpi_rhss_licencia", schema = "rrhh")
+@Table(name = "glpi_rhss_licencia")
 public class LicenciaTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
