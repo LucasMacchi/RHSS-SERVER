@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,8 @@ import org.springframework.web.server.ResponseStatusException;;
 @Service
 public class DataService {
 
+    @Value("${PATH_SAVE_FILES}")
+    private String pathToSave;
     @Autowired
     private IEmpresasRepo EmpresaRepo;
     @Autowired
@@ -51,8 +54,6 @@ public class DataService {
 
     
     public String dataUploader (MultipartFile file) {
-        String pathToSave = "./uploads";
-
         try {
             File dir = new File(pathToSave);
             System.out.println("DIR: "+dir.getAbsolutePath());
