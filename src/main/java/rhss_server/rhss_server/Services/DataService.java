@@ -4,10 +4,18 @@ import rhss_server.rhss_server.Interfaces.ILegajoRepo;
 import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
 import rhss_server.rhss_server.DTOs.EmpresaDto;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;;
 
 @Service
 public class DataService {
@@ -16,6 +24,7 @@ public class DataService {
     private IEmpresasRepo EmpresaRepo;
     @Autowired
     private ILegajoRepo LegajoRepo;
+
 
     public List<EmpresaModel> getAllEmpresas () {
         List<EmpresaModel> empresas = EmpresaRepo.findAll();
@@ -38,6 +47,25 @@ public class DataService {
     public List<LegajosTable> getLegajos (String nombre) {
         List<LegajosTable> legajos = LegajoRepo.findByFullnameContaining(nombre);
         return legajos;
+    }
+
+    
+    public String dataUploader (MultipartFile file) {
+        String pathToSave = "./uploads";
+
+        try {
+            File dir = new File(pathToSave);
+            System.out.println("DIR: "+dir.getAbsolutePath());
+            if(!dir.exists()) {
+                Boolean res = dir.mkdir();
+                System.out.println("PASO 3: "+res);
+            }
+                Path filepPath = Paths.get(pathToSave, file.getOriginalFilename());
+                Files.write(filepPath, file.getBytes());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"No se pudo cargar el archivo.");
+        }
+        return "Uploaded";
     }
 
 }

@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
+import rhss_server.rhss_server.Utils.SessionCheck;
 import rhss_server.rhss_server.DTOs.EmpresaDto;
 import rhss_server.rhss_server.Services.DataService;
 
@@ -31,6 +35,7 @@ import java.util.Map;
 @Validated
 public class DataControllers {
 
+    
     @Autowired
     private DataService service;
 
@@ -40,25 +45,35 @@ public class DataControllers {
         return "Data Route pinged at "+current;
     }
 
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        return this.service.dataUploader(file);
+    }
+
     @GetMapping("/all/empresas")
-    public List<EmpresaModel> allEmpresas () {
+    public List<EmpresaModel> allEmpresas (HttpSession session) {
+        new SessionCheck(session);
         return service.getAllEmpresas();
     }
 
     @PostMapping("/empresa")
-    public String createEmpresa (@Valid @RequestBody EmpresaDto body) {
+    public String createEmpresa (@Valid @RequestBody EmpresaDto body, HttpSession session) {
+        new SessionCheck(session);
         return service.createEmpresa(body);
     }
 
     @GetMapping("/legajos")
-    public List<LegajosTable> getAllLegajos() {
+    public List<LegajosTable> getAllLegajos(HttpSession session) {
+        new SessionCheck(session);
         return this.service.getAllLegajos();
     }
 
     @GetMapping("/legajos/{nombre}")
-    public List<LegajosTable> getLegajos(@PathVariable String nombre) {
+    public List<LegajosTable> getLegajos(@PathVariable String nombre, HttpSession session) {
+        new SessionCheck(session);
         return this.service.getLegajos(nombre);
     }
+    
     
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
