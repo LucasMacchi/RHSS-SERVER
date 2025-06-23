@@ -70,6 +70,8 @@ public class NovedadesService {
             novedad.setUsuario_id(user.get().getUsuario_id());
             novedad.setCategoria(data.categoria);
             novedad.setCerrado(false);
+            novedad.setTelefono(data.telefono);
+            novedad.setEmail(data.email);
             NovedadRepo.save(novedad);
             return "Novedad creada, numero "+novedad.getNumero();
         }

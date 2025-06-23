@@ -26,6 +26,8 @@ public class NovedadesModel {
     private String numero;
     private String categoria;
     private Boolean cerrado;
+    private String email;
+    private String telefono;
 
     public NovedadesModel () {
         LocalDate current = LocalDate.now();
@@ -43,6 +45,12 @@ public class NovedadesModel {
     }
     public void setEmpresa_id(byte empresa_id) {
         this.empresa_id = empresa_id;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
     public void setFecha_creacion(LocalDate fecha) {
         this.fecha = fecha;
@@ -88,6 +96,12 @@ public class NovedadesModel {
     }
     public Boolean getCerrado() {
         return cerrado;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getTelefono() {
+        return telefono;
     }
 
 }

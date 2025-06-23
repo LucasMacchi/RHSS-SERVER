@@ -19,4 +19,10 @@ public class NovedadDto {
 
     @NotEmpty(message = "Necesita una categoria valida.")
     public String categoria;
+
+    @NotEmpty(message = "Necesita un email valido.")
+    public String email;
+
+    @NotEmpty(message = "Necesita un telefono valido.")
+    public String telefono;
 }
