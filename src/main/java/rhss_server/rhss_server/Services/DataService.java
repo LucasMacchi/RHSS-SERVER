@@ -54,7 +54,7 @@ public class DataService {
 
     
     public String dataUploader (MultipartFile file, String folder) {
-        final String path = pathToSave+folder;
+        final String path = pathToSave+'/'+folder;
         try {
             File dir = new File(path);
             System.out.println("DIR: "+dir.getAbsolutePath()+" / FILENAME: "+file.getOriginalFilename());
