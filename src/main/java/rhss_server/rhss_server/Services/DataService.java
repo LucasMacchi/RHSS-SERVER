@@ -56,7 +56,7 @@ public class DataService {
     public String dataUploader (MultipartFile file) {
         try {
             File dir = new File(pathToSave);
-            System.out.println("DIR: "+dir.getAbsolutePath());
+            System.out.println("DIR: "+dir.getAbsolutePath()+" / FILENAME: "+file.getOriginalFilename());
             if(!dir.exists()) {
                 Boolean res = dir.mkdir();
                 System.out.println("DIRCTORY CREATED: "+res);
