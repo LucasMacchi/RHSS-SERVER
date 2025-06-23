@@ -44,9 +44,9 @@ public class DataControllers {
         return "Data Route pinged at "+current;
     }
 
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
-        return this.service.dataUploader(file);
+    @PostMapping("/upload/{folder}")
+    public String uploadFile(@RequestParam("file") MultipartFile file, @PathVariable String folder) {
+        return this.service.dataUploader(file, folder);
     }
 
     @GetMapping("/all/empresas")

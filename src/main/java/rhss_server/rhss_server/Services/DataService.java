@@ -53,16 +53,17 @@ public class DataService {
     }
 
     
-    public String dataUploader (MultipartFile file) {
+    public String dataUploader (MultipartFile file, String folder) {
+        final String path = pathToSave+folder;
         try {
-            File dir = new File(pathToSave);
+            File dir = new File(path);
             System.out.println("DIR: "+dir.getAbsolutePath()+" / FILENAME: "+file.getOriginalFilename());
             if(!dir.exists()) {
                 Boolean res = dir.mkdir();
                 System.out.println("DIRCTORY CREATED: "+res);
             }
             System.out.println("Puede escribirse "+ dir.canWrite());
-            Path filepPath = Paths.get(pathToSave, file.getOriginalFilename());
+            Path filepPath = Paths.get(path, file.getOriginalFilename());
             Files.write(filepPath, file.getBytes());
             System.out.println("FILE SAVED");
         } catch (Exception e) {
