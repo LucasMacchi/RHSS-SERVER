@@ -1,5 +1,7 @@
 package rhss_server.rhss_server.Tables;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -13,6 +15,8 @@ public class LegajosTable {
     private String fullname;
     private long cuil;
     private String sector;
+    private String direccion;
+    private LocalDate fecha_egreso;
     public long getCuil() {
         return cuil;
     }
@@ -24,6 +28,12 @@ public class LegajosTable {
     }
     public String getSector() {
         return sector;
+    }
+    public String getDireccion() {
+        return direccion;
+    }
+    public LocalDate getFecha_egreso() {
+        return fecha_egreso;
     }
 
 }

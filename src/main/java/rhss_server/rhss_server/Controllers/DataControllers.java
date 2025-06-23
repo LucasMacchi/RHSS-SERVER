@@ -3,6 +3,7 @@ package rhss_server.rhss_server.Controllers;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -44,10 +45,19 @@ public class DataControllers {
         return "Data Route pinged at "+current;
     }
 
-    @PostMapping("/upload/{folder}")
-    public String uploadFile(@RequestParam("file") MultipartFile file, @PathVariable String folder) {
-        return this.service.dataUploader(file, folder);
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile file, 
+    @RequestParam("concepto") String concepto, @RequestParam("novedad") int novedad,
+    @RequestParam("carpeta") String carpeta,HttpSession session) {
+        new SessionCheck(session);
+        return this.service.dataUploader(file, carpeta, concepto, novedad);
     }
+
+    @PostMapping("/download")
+    public Resource downloadFile(@RequestParam("url") String url,HttpSession session) {
+        return this.service.fileDonwload(url);
+    }
+    
 
     @GetMapping("/all/empresas")
     public List<EmpresaModel> allEmpresas (HttpSession session) {

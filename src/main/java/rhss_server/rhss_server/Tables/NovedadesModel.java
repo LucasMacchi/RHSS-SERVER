@@ -25,6 +25,7 @@ public class NovedadesModel {
     private LocalDate fecha;
     private String numero;
     private String categoria;
+    private Boolean cerrado;
 
     public NovedadesModel () {
         LocalDate current = LocalDate.now();
@@ -55,6 +56,9 @@ public class NovedadesModel {
     public void setSolicitante(String solicitante) {
         this.solicitante = solicitante;
     }
+    public void setCerrado(Boolean cerrado) {
+        this.cerrado = cerrado;
+    }
     public String getCausa() {
         return causa;
     }
@@ -81,6 +85,9 @@ public class NovedadesModel {
     }
     public long getNovedad_id() {
         return novedad_id;
+    }
+    public Boolean getCerrado() {
+        return cerrado;
     }
 
 }

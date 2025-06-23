@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import rhss_server.rhss_server.DTOs.NovedadDto;
 import rhss_server.rhss_server.DTOs.NovedadFilterDto;
+import rhss_server.rhss_server.Interfaces.IArchivoRepo;
 import rhss_server.rhss_server.Interfaces.IAusenteRepo;
 import rhss_server.rhss_server.Interfaces.ILegajoRepo;
 import rhss_server.rhss_server.Interfaces.ILicenciaRepo;
@@ -21,6 +22,7 @@ import rhss_server.rhss_server.Interfaces.INovedadesRepo;
 import rhss_server.rhss_server.Interfaces.IPersonalRepo;
 import rhss_server.rhss_server.Interfaces.ISancionRepo;
 import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
+import rhss_server.rhss_server.Tables.ArchivoModel;
 import rhss_server.rhss_server.Tables.AusenteModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
 import rhss_server.rhss_server.Tables.LicenciaTable;
@@ -47,6 +49,8 @@ public class NovedadesService {
     private ILicenciaRepo LicenciaRepo;
     @Autowired
     private IPersonalRepo PersonalRepo;
+    @Autowired
+    private IArchivoRepo ArchivoRepo;
 
     public String postNovedad (NovedadDto data) {
         LocalDate current = LocalDate.now();
@@ -65,6 +69,7 @@ public class NovedadesService {
             novedad.setSolicitante(data.solicitante);
             novedad.setUsuario_id(user.get().getUsuario_id());
             novedad.setCategoria(data.categoria);
+            novedad.setCerrado(false);
             NovedadRepo.save(novedad);
             return "Novedad creada, numero "+novedad.getNumero();
         }
@@ -105,9 +110,10 @@ public class NovedadesService {
         List<PersonalTable> personal = PersonalRepo.findByNovedad(novedad_id);
         List<LicenciaTable> licencias = LicenciaRepo.findByNovedad(novedad_id);
         List<AusenteModel> ausentes = AusenteRepo.findByNovedad(novedad_id);
+        List<ArchivoModel> archivos = ArchivoRepo.findByNovedad(novedad_id);
         if(novedad.isPresent()) {
             Optional<LegajosTable> leg = LegajoRepo.findById(novedad.get().getLegajo());
-            NovLegajo novleg = new NovLegajo(leg.get(), novedad.get(),ausentes,sanciones,personal,licencias);
+            NovLegajo novleg = new NovLegajo(leg.get(), novedad.get(),ausentes,sanciones,personal,licencias, archivos);
             return novleg;
         }
         else {
@@ -130,6 +136,28 @@ public class NovedadesService {
     public List<NovedadesModel> getLegNov (Long legajo) {
         List<NovedadesModel> novedades = NovedadRepo.findByLegajo(legajo);
         return novedades;
+    }
+
+    public String changeStateNov (long id) {
+        try {
+            Optional<NovedadesModel> novedad = NovedadRepo.findById(id);
+            if(novedad.isPresent()) {
+                if(novedad.get().getCerrado()) {
+                    novedad.get().setCerrado(false);
+                    NovedadRepo.save(novedad.get());
+                }
+                else {
+                    novedad.get().setCerrado(true);
+                    NovedadRepo.save(novedad.get());
+                }
+                return "Estado cambiado.";
+            }
+            else {
+                throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Novedad no encontrada.");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Novedad no encontrada.");
+        }
     }
 
 

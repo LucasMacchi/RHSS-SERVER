@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -83,6 +84,12 @@ public class NovedadControllers {
     public String[] getCategories(HttpSession session) {
         new SessionCheck(session);
         return this.service.getCategories();
+    }
+
+    @PatchMapping("/state/{id}")
+    public String changeState (@PathVariable long id ,HttpSession session) {
+        new SessionCheck(session);
+        return this.service.changeStateNov(id);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
