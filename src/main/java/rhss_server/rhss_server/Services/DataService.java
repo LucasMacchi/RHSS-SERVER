@@ -66,6 +66,8 @@ public class DataService {
             Files.write(filepPath, file.getBytes());
             System.out.println("FILE SAVED");
         } catch (Exception e) {
+            System.out.println("ERROR TO SAVE");
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"No se pudo cargar el archivo.");
         }
         return "Uploaded";
