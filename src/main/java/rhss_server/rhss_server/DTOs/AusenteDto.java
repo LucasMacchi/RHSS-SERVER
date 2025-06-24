@@ -15,7 +15,7 @@ public class AusenteDto {
 
     @NotNull(message = "Necesita una novedad.")
     @Min(value = 1)
-    public int novedad_id;
+    public long novedad_id;
 
     @NotNull(message = "Es necesario un legajo.")
     @Min(value = 1)

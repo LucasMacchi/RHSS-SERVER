@@ -20,7 +20,7 @@ public class ArchivoModel {
     private LocalDate fecha;
 
     @Column(name = "novedad_id")
-    private int novedad;
+    private long novedad;
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
@@ -28,7 +28,7 @@ public class ArchivoModel {
     public void setConcepto(String concepto) {
         this.concepto = concepto;
     }
-    public void setNovedad(int novedad) {
+    public void setNovedad(long novedad) {
         this.novedad = novedad;
     }
     public void setRuta(String ruta) {
@@ -40,7 +40,7 @@ public class ArchivoModel {
     public String getConcepto() {
         return concepto;
     }
-    public int getNovedad() {
+    public long getNovedad() {
         return novedad;
     }
     public String getRuta() {

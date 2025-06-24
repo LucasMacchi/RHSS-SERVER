@@ -2,22 +2,29 @@ package rhss_server.rhss_server.Services;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import rhss_server.rhss_server.DTOs.PersonalDto;
+import rhss_server.rhss_server.Interfaces.INovedadesRepo;
 import rhss_server.rhss_server.Interfaces.IPersonalRepo;
+import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
+import rhss_server.rhss_server.Tables.NovedadesModel;
 import rhss_server.rhss_server.Tables.PersonalTable;
+import rhss_server.rhss_server.Tables.UsuarioModel;
 
 @Service
 public class PersonalService {
     
     @Autowired
     private IPersonalRepo PersonalRepo;
+    @Autowired
+    private INovedadesRepo NovedadRepo;
+    @Autowired
+    private IUsuarioRepo UsuarioRepo;
+    @Autowired
+    private EmailSender emailSender;
 
     public String postPersonal (PersonalDto data) {
         LocalDate current = LocalDate.now();
@@ -30,6 +37,10 @@ public class PersonalService {
         personal.setLegajo(data.legajo);
         personal.setNovedad_id(data.novedad_id);
         PersonalRepo.save(personal);
+        NovedadesModel novedad = NovedadRepo.findById(data.novedad_id).get();
+        UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
+        emailSender.sendEmailActionNovedad(usuario.getEmail(), novedad.getNumero(),
+            novedad.getCategoria(), novedad.getFecha(), data.categoria, data.causa);
         return "Informe de personal creado";
     }
 
@@ -49,13 +60,8 @@ public class PersonalService {
     }
 
     public PersonalTable getById(long id) {
-        Optional<PersonalTable> personal = PersonalRepo.findById(id);
-        if(personal.isPresent()){
-            return personal.get();
-        }
-        else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Informe no encontrado.");
-        }
+        PersonalTable personal = PersonalRepo.findById(id).get();
+        return personal;    
     }
 
     public String[] getCategories() {

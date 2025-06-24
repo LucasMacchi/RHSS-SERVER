@@ -22,5 +22,5 @@ public class SancionDto {
     public String causa;
 
     @NotNull(message = "Tiene que ser una novedad valida.")
-    public int novedad_id;
+    public long novedad_id;
 }

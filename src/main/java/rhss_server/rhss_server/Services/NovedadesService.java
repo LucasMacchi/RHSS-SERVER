@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -51,33 +49,31 @@ public class NovedadesService {
     private IPersonalRepo PersonalRepo;
     @Autowired
     private IArchivoRepo ArchivoRepo;
+    @Autowired
+    private EmailSender emailSender;
 
     public String postNovedad (NovedadDto data) {
         LocalDate current = LocalDate.now();
         NovedadesModel novedad = new NovedadesModel();
-        Optional<UsuarioModel> user = UsuarioRepo.findByUsername(data.solicitante);
-        if(user.isPresent()) {
-            novedad.setCausa(data.causa);
-            if(data.empresa_id == 0) {
-                novedad.setEmpresa_id(user.get().getEmpresa_id());
-            }
-            else {
-                novedad.setEmpresa_id(data.empresa_id);
-            }
-            novedad.setFecha_creacion(current);
-            novedad.setLegajo(data.legajo);
-            novedad.setSolicitante(data.solicitante);
-            novedad.setUsuario_id(user.get().getUsuario_id());
-            novedad.setCategoria(data.categoria);
-            novedad.setCerrado(false);
-            novedad.setTelefono(data.telefono);
-            novedad.setEmail(data.email);
-            NovedadRepo.save(novedad);
-            return "Novedad creada, numero "+novedad.getNumero();
+        UsuarioModel user = UsuarioRepo.findByUsername(data.solicitante).get();
+        novedad.setCausa(data.causa);
+        if(data.empresa_id == 0) {
+            novedad.setEmpresa_id(user.getEmpresa_id());
         }
         else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no encontrada.");
+            novedad.setEmpresa_id(data.empresa_id);
         }
+        novedad.setFecha_creacion(current);
+        novedad.setLegajo(data.legajo);
+        novedad.setSolicitante(data.solicitante);
+        novedad.setUsuario_id(user.getUsuario_id());
+        novedad.setCategoria(data.categoria);
+        novedad.setCerrado(false);
+        novedad.setTelefono(data.telefono);
+        novedad.setEmail(data.email);
+        NovedadRepo.save(novedad);
+        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa);
+        return "Novedad creada, numero "+novedad.getNumero();
 
     }
 
@@ -107,20 +103,15 @@ public class NovedadesService {
     }
 
     public NovLegajo getNov (long novedad_id) {
-        Optional<NovedadesModel> novedad = NovedadRepo.findById(novedad_id);
+        NovedadesModel novedad = NovedadRepo.findById(novedad_id).get();
         List<SancionModel> sanciones = SancionRepo.findByNovedad(novedad_id);
         List<PersonalTable> personal = PersonalRepo.findByNovedad(novedad_id);
         List<LicenciaTable> licencias = LicenciaRepo.findByNovedad(novedad_id);
         List<AusenteModel> ausentes = AusenteRepo.findByNovedad(novedad_id);
         List<ArchivoModel> archivos = ArchivoRepo.findByNovedad(novedad_id);
-        if(novedad.isPresent()) {
-            Optional<LegajosTable> leg = LegajoRepo.findById(novedad.get().getLegajo());
-            NovLegajo novleg = new NovLegajo(leg.get(), novedad.get(),ausentes,sanciones,personal,licencias, archivos);
-            return novleg;
-        }
-        else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Novedad no encontrada.");
-        }
+        LegajosTable leg = LegajoRepo.findById(novedad.getLegajo()).get();
+        NovLegajo novleg = new NovLegajo(leg, novedad,ausentes,sanciones,personal,licencias, archivos);
+        return novleg;
     }
 
     public List<NovedadesModel> getTodayNov () {
@@ -142,21 +133,21 @@ public class NovedadesService {
 
     public String changeStateNov (long id) {
         try {
-            Optional<NovedadesModel> novedad = NovedadRepo.findById(id);
-            if(novedad.isPresent()) {
-                if(novedad.get().getCerrado()) {
-                    novedad.get().setCerrado(false);
-                    NovedadRepo.save(novedad.get());
-                }
-                else {
-                    novedad.get().setCerrado(true);
-                    NovedadRepo.save(novedad.get());
-                }
-                return "Estado cambiado.";
+            NovedadesModel novedad = NovedadRepo.findById(id).get();
+            UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
+            if(novedad.getCerrado()) {
+                novedad.setCerrado(false);
+                NovedadRepo.save(novedad);
+                emailSender.sendEmailReopenNovedad(usuario.getEmail(), 
+                novedad.getNumero(),novedad.getCategoria(),novedad.getFecha());
             }
             else {
-                throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Novedad no encontrada.");
+                novedad.setCerrado(true);
+                NovedadRepo.save(novedad);
+                emailSender.sendEmailCloseNovedad(usuario.getEmail(), novedad.getNumero(),
+                novedad.getCategoria(),novedad.getFecha());
             }
+            return "Estado cambiado.";
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Novedad no encontrada.");
         }

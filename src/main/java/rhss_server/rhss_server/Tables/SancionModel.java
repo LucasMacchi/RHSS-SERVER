@@ -22,7 +22,7 @@ public class SancionModel {
     private String causa;
 
     @Column(name = "novedad_id")
-    private int novedad;
+    private long novedad;
 
     public void setCausa(String causa) {
         this.causa = causa;
@@ -42,7 +42,7 @@ public class SancionModel {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    public void setNovedad_id(int novedad) {
+    public void setNovedad_id(long novedad) {
         this.novedad = novedad;
     }
     public String getCausa() {
@@ -63,7 +63,7 @@ public class SancionModel {
     public String getTipo() {
         return tipo;
     }
-    public int getNovedad_id() {
+    public long getNovedad_id() {
         return novedad;
     }
 }

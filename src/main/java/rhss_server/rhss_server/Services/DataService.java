@@ -2,9 +2,13 @@ package rhss_server.rhss_server.Services;
 import rhss_server.rhss_server.Interfaces.IArchivoRepo;
 import rhss_server.rhss_server.Interfaces.IEmpresasRepo;
 import rhss_server.rhss_server.Interfaces.ILegajoRepo;
+import rhss_server.rhss_server.Interfaces.INovedadesRepo;
+import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
 import rhss_server.rhss_server.Tables.ArchivoModel;
 import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
+import rhss_server.rhss_server.Tables.NovedadesModel;
+import rhss_server.rhss_server.Tables.UsuarioModel;
 import rhss_server.rhss_server.DTOs.EmpresaDto;
 
 import java.io.File;
@@ -34,6 +38,12 @@ public class DataService {
     private ILegajoRepo LegajoRepo;
     @Autowired
     private IArchivoRepo ArchivoRepo;
+    @Autowired
+    private INovedadesRepo NovedadRepo;
+    @Autowired
+    private IUsuarioRepo UsuarioRepo;
+    @Autowired
+    private EmailSender emailSender;
 
 
     public List<EmpresaModel> getAllEmpresas () {
@@ -61,7 +71,7 @@ public class DataService {
 
     
     public String dataUploader (MultipartFile file, String carpeta, String concepto, 
-    int novedad) {
+    long novedadId) {
         final String path = pathToSave+'/'+carpeta;
         try {
             File dir = new File(path);
@@ -76,10 +86,14 @@ public class DataService {
             System.out.println("FILE SAVED");
             ArchivoModel archivo = new ArchivoModel();
             archivo.setConcepto(concepto);
-            archivo.setNovedad(novedad);
+            archivo.setNovedad(novedadId);
             archivo.setFecha(LocalDate.now());
             archivo.setRuta(filePath.toAbsolutePath().toString());
             ArchivoRepo.save(archivo);
+            NovedadesModel novedad = NovedadRepo.findById(novedadId).get();
+            UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
+            emailSender.sendEmailActionNovedad(usuario.getEmail(), novedad.getNumero(),
+            novedad.getCategoria(), novedad.getFecha(), "Archivo Cargado", "Concepto: "+concepto);
         } catch (Exception e) {
             System.out.println("ERROR TO SAVE");
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"No se pudo cargar el archivo.");

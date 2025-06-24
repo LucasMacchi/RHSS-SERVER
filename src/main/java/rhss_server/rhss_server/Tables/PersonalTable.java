@@ -21,7 +21,7 @@ public class PersonalTable {
     private String causa;
 
     @Column(name = "novedad_id")
-    private int novedad;
+    private long novedad;
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
@@ -41,7 +41,7 @@ public class PersonalTable {
     public void setFecha_ocurrido(LocalDate fecha_ocurrido) {
         this.fecha_ocurrido = fecha_ocurrido;
     }
-    public void setNovedad_id(int novedad) {
+    public void setNovedad_id(long novedad) {
         this.novedad = novedad;
     }
     public String getCategoria() {
@@ -56,7 +56,7 @@ public class PersonalTable {
     public LocalDate getFecha_ocurrido() {
         return fecha_ocurrido;
     }
-    public int getNovedad_id() {
+    public long getNovedad_id() {
         return novedad;
     }
     public int getLegajo() {

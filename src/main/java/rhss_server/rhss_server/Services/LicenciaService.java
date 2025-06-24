@@ -2,21 +2,28 @@ package rhss_server.rhss_server.Services;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import rhss_server.rhss_server.DTOs.LicenciaDto;
 import rhss_server.rhss_server.Interfaces.ILicenciaRepo;
+import rhss_server.rhss_server.Interfaces.INovedadesRepo;
+import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
 import rhss_server.rhss_server.Tables.LicenciaTable;
+import rhss_server.rhss_server.Tables.NovedadesModel;
+import rhss_server.rhss_server.Tables.UsuarioModel;
 
 @Service
 public class LicenciaService {
     @Autowired
     private ILicenciaRepo LicenciaRepo;
+    @Autowired
+    private INovedadesRepo NovedadRepo;
+    @Autowired
+    private IUsuarioRepo UsuarioRepo;
+    @Autowired
+    private EmailSender emailSender;
 
     public String postLicencia (LicenciaDto data) {
         LocalDate current = LocalDate.now();
@@ -29,6 +36,11 @@ public class LicenciaService {
         licencia.setLegajo(data.legajo);
         licencia.setNovedad(data.novedad);
         LicenciaRepo.save(licencia);
+        final String info = "Licencia desde "+data.fecha_entrada+" al "+data.fecha_salida+".\n"+data.causa;
+        NovedadesModel novedad = NovedadRepo.findById(data.novedad).get();
+        UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
+        emailSender.sendEmailActionNovedad(usuario.getEmail(), novedad.getNumero(),
+         novedad.getCategoria(), novedad.getFecha(), data.categoria,info);
         return "Licencia Creada";
     }
 
@@ -48,11 +60,8 @@ public class LicenciaService {
     }
 
     public LicenciaTable getById (long id) {
-        Optional<LicenciaTable> lic = LicenciaRepo.findById(id);
-        if(lic.isPresent()) return lic.get();
-        else{
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Licencia no encontrada.");
-        }
+        LicenciaTable lic = LicenciaRepo.findById(id).get();
+        return lic;
     }
 
     public String[] getCategories() {

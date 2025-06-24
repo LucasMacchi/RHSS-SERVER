@@ -2,8 +2,6 @@ package rhss_server.rhss_server.Services;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-
 import rhss_server.rhss_server.Utils.SessionCheck;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,52 +41,32 @@ public class UserService {
     }
 
     public String activateUser (String id) {
-        Optional<UsuarioModel> user = UsuarioRepo.findById(Byte.parseByte(id));
-        if(user.isPresent()) {
-            user.get().setActivado(true);
-            UsuarioRepo.save(user.get());
-            return "Usuario Activado";
-        }
-        else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no encontrado.");
-        }
+        UsuarioModel user = UsuarioRepo.findById(Long.parseLong(id)).get();
+        user.setActivado(true);
+        UsuarioRepo.save(user);
+        return "Usuario Activado";
     }
 
     public String deactivateUser (String id) {
-        Optional<UsuarioModel> user = UsuarioRepo.findById(Byte.parseByte(id));
-        if(user.isPresent()) {
-            user.get().setActivado(false);
-            UsuarioRepo.save(user.get());
-            return "Usuario Desactivado";
-        }
-        else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no encontrado.");
-        }
+        UsuarioModel user = UsuarioRepo.findById(Long.parseLong(id)).get();
+        user.setActivado(false);
+        UsuarioRepo.save(user);
+        return "Usuario Desactivado";
     }
 
     public UsuarioModel getUniqUser (String id) {
-        Optional<UsuarioModel> user = UsuarioRepo.findById(Byte.parseByte(id));
-        if(user.isPresent()) {
-            return user.get();
-        }
-        else {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no encontrado.");
-        }
+        UsuarioModel user = UsuarioRepo.findById(Long.parseLong(id)).get();
+        return user;
     }
     
     public String loginSession (String username, HttpSession session) {
-        Optional<UsuarioModel> user = UsuarioRepo.findByUsername(username);
-        if(user.isPresent()) {
-            if(user.get().getActivado()) {
-                session.setAttribute("username", user.get().getUsername());
-                session.setAttribute("admin", user.get().getAdmin());
-                session.setAttribute("administrativo", user.get().getAdministrativo());
-                String sessionId = session.getId();
-                return sessionId;
-            }
-            else {
-                throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no activado.");
-            }
+        UsuarioModel user = UsuarioRepo.findByUsername(username).get();
+        if(user.getActivado()) {
+            session.setAttribute("username", user.getUsername());
+            session.setAttribute("admin", user.getAdmin());
+            session.setAttribute("administrativo", user.getAdministrativo());
+            String sessionId = session.getId();
+            return sessionId;
         }
         else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Usuario no encontrado.");
