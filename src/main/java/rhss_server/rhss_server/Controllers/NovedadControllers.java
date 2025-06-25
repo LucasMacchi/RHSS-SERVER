@@ -51,49 +51,41 @@ public class NovedadControllers {
     }
 
     @PostMapping("/all")
-    public List<NovedadesModel> getAllNovedades(@Valid @RequestBody NovedadFilterDto data,HttpSession session) {
-        new SessionCheck(session);
+    public List<NovedadesModel> getAllNovedades(@Valid @RequestBody NovedadFilterDto data) {
         return this.service.getAllNov(data);
     }
     @PostMapping("/allsup")
-    public List<NovedadesModel> getAllNovedadesSup(@Valid @RequestBody NovedadFilterDto data,HttpSession session) {
-        new SessionCheck(session);
+    public List<NovedadesModel> getAllNovedadesSup(@Valid @RequestBody NovedadFilterDto data) {
         return this.service.getAllNovSup(data);
     }
 
     @GetMapping("/uniq/{id}")
-    public NovLegajo getUniqNov(@PathVariable String id,HttpSession session) {
-        new SessionCheck(session);
+    public NovLegajo getUniqNov(@PathVariable String id) {
         return this.service.getNov(Long.parseLong(id));
     }
 
     @GetMapping("/legajo/{legajo}")
-    public List<NovedadesModel> getNovByLegajo(@PathVariable String legajo,HttpSession session) {
-        new SessionCheck(session);
+    public List<NovedadesModel> getNovByLegajo(@PathVariable String legajo) {
         return this.service.getLegNov(Long.parseLong(legajo));
     }
 
     @GetMapping("/nro/{nro}")
-    public List<NovedadesModel> getByNro(@PathVariable String nro,HttpSession session) {
-        new SessionCheck(session);
+    public List<NovedadesModel> getByNro(@PathVariable String nro) {
         return this.service.getNroNov(nro);
     }
     
     @GetMapping("/today")
-    public List<NovedadesModel> getNovedadesToday(HttpSession session) {
-        new SessionCheck(session);
+    public List<NovedadesModel> getNovedadesToday() {
         return this.service.getTodayNov();
     }
 
     @GetMapping("/categories")
-    public String[] getCategories(HttpSession session) {
-        new SessionCheck(session);
+    public String[] getCategories() {
         return this.service.getCategories();
     }
 
     @PatchMapping("/state/{id}")
-    public String changeState (@PathVariable long id ,HttpSession session) {
-        new SessionCheck(session);
+    public String changeState (@PathVariable long id ) {
         return this.service.changeStateNov(id);
     }
 

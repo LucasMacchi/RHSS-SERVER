@@ -55,18 +55,15 @@ public class UserControllers {
         return "User Route pinged at "+current;
     }
     @GetMapping("/all")
-    public List<UsuarioModel> getAllUsuarios (HttpSession session) {
-        new SessionCheck(session);
+    public List<UsuarioModel> getAllUsuarios () {
         return this.service.getAllUsuarios();
     }
     @GetMapping("/uniq/{id}")
-    public UsuarioModel getUser (@PathVariable String id,HttpSession session) {
-        new SessionCheck(session);
+    public UsuarioModel getUser (@PathVariable String id) {
         return this.service.getUniqUser(id);
     }
     @PostMapping("/registrar")
-    public String registerUser (@Valid @RequestBody RegisterUserDto data,HttpSession session) {
-        new SessionCheck(session).checkAdmin();;
+    public String registerUser (@Valid @RequestBody RegisterUserDto data) {
         return this.service.registerUser(data);
     }
     @PatchMapping("/activate/{id}")

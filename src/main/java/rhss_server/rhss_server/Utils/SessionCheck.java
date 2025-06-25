@@ -22,7 +22,7 @@ public class SessionCheck {
         else {
             throw new ResponseStatusException(HttpStatusCode.valueOf(401),"No autorizado.");
         }
-
+        
     }
 
     public void checkAdmin () {

@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
-import rhss_server.rhss_server.Utils.SessionCheck;
 import rhss_server.rhss_server.DTOs.EmpresaDto;
 import rhss_server.rhss_server.Services.DataService;
 
@@ -48,38 +46,33 @@ public class DataControllers {
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file, 
     @RequestParam("concepto") String concepto, @RequestParam("novedad") int novedad,
-    @RequestParam("carpeta") String carpeta,HttpSession session) {
-        new SessionCheck(session);
+    @RequestParam("carpeta") String carpeta) {
         return this.service.dataUploader(file, carpeta, concepto, novedad);
     }
 
     @PostMapping("/download")
-    public Resource downloadFile(@RequestParam("url") String url,HttpSession session) {
+    public Resource downloadFile(@RequestParam("url") String url) {
         return this.service.fileDonwload(url);
     }
     
 
     @GetMapping("/all/empresas")
-    public List<EmpresaModel> allEmpresas (HttpSession session) {
-        new SessionCheck(session);
+    public List<EmpresaModel> allEmpresas () {
         return service.getAllEmpresas();
     }
 
     @PostMapping("/empresa")
-    public String createEmpresa (@Valid @RequestBody EmpresaDto body, HttpSession session) {
-        new SessionCheck(session);
+    public String createEmpresa (@Valid @RequestBody EmpresaDto body) {
         return service.createEmpresa(body);
     }
 
     @GetMapping("/legajos")
-    public List<LegajosTable> getAllLegajos(HttpSession session) {
-        new SessionCheck(session);
+    public List<LegajosTable> getAllLegajos() {
         return this.service.getAllLegajos();
     }
 
     @GetMapping("/legajos/{nombre}")
-    public List<LegajosTable> getLegajos(@PathVariable String nombre, HttpSession session) {
-        new SessionCheck(session);
+    public List<LegajosTable> getLegajos(@PathVariable String nombre) {
         return this.service.getLegajos(nombre);
     }
     
