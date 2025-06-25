@@ -101,6 +101,27 @@ public class NovedadesService {
         
         return novedadesF;
     }
+    public List<NovedadesModel> getAllNovSup (NovedadFilterDto data) {
+        List<NovedadesModel> novedades = NovedadRepo.findAll();
+        List<NovedadesModel> novedadesF = new ArrayList<>();
+        Iterator<NovedadesModel> ite = novedades.iterator();
+        while (ite.hasNext()) {
+            NovedadesModel nov = ite.next();
+            if(!data.categoria.isBlank() && !nov.getCategoria().equals(data.categoria)){
+                continue;
+            }
+            if(!data.solicitante.isBlank() && !nov.getSolicitante().equals(data.solicitante)){
+                continue;
+            }
+            if(nov.getFecha().isBefore(data.fecha_inicio) || nov.getFecha().isAfter(data.fecha_final)){
+                continue;
+            }
+
+            novedadesF.add(nov);
+        }
+        
+        return novedadesF;
+    }
 
     public NovLegajo getNov (long novedad_id) {
         NovedadesModel novedad = NovedadRepo.findById(novedad_id).get();

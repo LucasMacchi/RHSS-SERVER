@@ -55,6 +55,11 @@ public class NovedadControllers {
         new SessionCheck(session);
         return this.service.getAllNov(data);
     }
+    @PostMapping("/allsup")
+    public List<NovedadesModel> getAllNovedadesSup(@Valid @RequestBody NovedadFilterDto data,HttpSession session) {
+        new SessionCheck(session);
+        return this.service.getAllNovSup(data);
+    }
 
     @GetMapping("/uniq/{id}")
     public NovLegajo getUniqNov(@PathVariable String id,HttpSession session) {
