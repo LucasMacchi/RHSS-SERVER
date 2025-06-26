@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
+import rhss_server.rhss_server.DTOs.DeleteFileDto;
 import rhss_server.rhss_server.DTOs.EmpresaDto;
 import rhss_server.rhss_server.Services.DataService;
 
@@ -54,8 +56,12 @@ public class DataControllers {
     public Resource downloadFile(@RequestParam("url") String url) {
         return this.service.fileDonwload(url);
     }
-    
 
+    @DeleteMapping("/delete")
+    public String deleteFile (@Valid @RequestBody DeleteFileDto data) {
+        return this.service.deleteFile(data);
+    }
+    
     @GetMapping("/all/empresas")
     public List<EmpresaModel> allEmpresas () {
         return service.getAllEmpresas();

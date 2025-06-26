@@ -18,14 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.DTOs.NovedadDto;
 import rhss_server.rhss_server.DTOs.NovedadFilterDto;
 import rhss_server.rhss_server.Services.NovedadesService;
 import rhss_server.rhss_server.Tables.NovedadesModel;
 import rhss_server.rhss_server.Utils.NovLegajo;
-import rhss_server.rhss_server.Utils.SessionCheck;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,8 +43,7 @@ public class NovedadControllers {
     }
     
     @PostMapping("/create")
-    public String createNovedad(@Valid @RequestBody NovedadDto data,HttpSession session) {
-        new SessionCheck(session);
+    public String createNovedad(@Valid @RequestBody NovedadDto data) {
         return this.service.postNovedad(data);
     }
 

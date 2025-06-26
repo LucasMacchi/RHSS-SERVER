@@ -9,6 +9,7 @@ import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
 import rhss_server.rhss_server.Tables.NovedadesModel;
 import rhss_server.rhss_server.Tables.UsuarioModel;
+import rhss_server.rhss_server.DTOs.DeleteFileDto;
 import rhss_server.rhss_server.DTOs.EmpresaDto;
 
 import java.io.File;
@@ -22,10 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class DataService {
@@ -114,6 +116,23 @@ public class DataService {
         } catch (Exception e) {
             System.out.println("ERROR TO DOWNLOAD");
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"No se pudo descargar el archivo.");
+        }
+    }
+
+    public String deleteFile (DeleteFileDto data) {
+        Path pathfile = Path.of(data.url);
+        try {
+            boolean deleted = Files.deleteIfExists(pathfile);
+            if(deleted) {
+                System.out.println("Archivo elimnado");
+                ArchivoRepo.deleteById(data.archivo_id);
+                return "Archivo eliminado";
+            }
+            else{
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No se pudo eliminar el archivo");
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No se pudo eliminar el archivo: " + e.getMessage());
         }
     }
 

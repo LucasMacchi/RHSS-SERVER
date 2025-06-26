@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import rhss_server.rhss_server.DTOs.NovedadDto;
 import rhss_server.rhss_server.DTOs.NovedadFilterDto;
+import rhss_server.rhss_server.Interfaces.IAltaRepo;
 import rhss_server.rhss_server.Interfaces.IArchivoRepo;
 import rhss_server.rhss_server.Interfaces.IAusenteRepo;
 import rhss_server.rhss_server.Interfaces.ILegajoRepo;
@@ -20,6 +21,7 @@ import rhss_server.rhss_server.Interfaces.INovedadesRepo;
 import rhss_server.rhss_server.Interfaces.IPersonalRepo;
 import rhss_server.rhss_server.Interfaces.ISancionRepo;
 import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
+import rhss_server.rhss_server.Tables.AltaTable;
 import rhss_server.rhss_server.Tables.ArchivoModel;
 import rhss_server.rhss_server.Tables.AusenteModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
@@ -50,6 +52,8 @@ public class NovedadesService {
     @Autowired
     private IArchivoRepo ArchivoRepo;
     @Autowired
+    private IAltaRepo AltaRepo;
+    @Autowired
     private EmailSender emailSender;
 
     public String postNovedad (NovedadDto data) {
@@ -64,7 +68,7 @@ public class NovedadesService {
             novedad.setEmpresa_id(data.empresa_id);
         }
         novedad.setFecha_creacion(current);
-        novedad.setLegajo(data.legajo);
+        if(!data.categoria.equals("ALTA DE LEGAJO")) novedad.setLegajo(data.legajo);
         novedad.setSolicitante(data.solicitante);
         novedad.setUsuario_id(user.getUsuario_id());
         novedad.setCategoria(data.categoria);
@@ -130,9 +134,22 @@ public class NovedadesService {
         List<LicenciaTable> licencias = LicenciaRepo.findByNovedad(novedad_id);
         List<AusenteModel> ausentes = AusenteRepo.findByNovedad(novedad_id);
         List<ArchivoModel> archivos = ArchivoRepo.findByNovedad(novedad_id);
-        LegajosTable leg = LegajoRepo.findById(novedad.getLegajo()).get();
-        NovLegajo novleg = new NovLegajo(leg, novedad,ausentes,sanciones,personal,licencias, archivos);
-        return novleg;
+        List<AltaTable> altas = AltaRepo.findByNovedad(novedad_id);
+        if(!novedad.getCategoria().equals("ALTA DE LEGAJO")) {
+            LegajosTable leg = LegajoRepo.findById(novedad.getLegajo()).get();
+            NovLegajo novleg = new NovLegajo(leg, novedad,ausentes,sanciones,personal,licencias, archivos,altas);
+            return novleg;
+        }
+        else {
+            LegajosTable legajo = new LegajosTable();
+            legajo.setCuil(0);
+            legajo.setDireccion("");
+            legajo.setFecha_egreso(LocalDate.now());
+            legajo.setFullname("");
+            legajo.setSector("");
+            NovLegajo novleg = new NovLegajo(legajo, novedad,ausentes,sanciones,personal,licencias, archivos,altas);
+            return novleg;
+        }
     }
 
     public List<NovedadesModel> getTodayNov () {
@@ -178,7 +195,7 @@ public class NovedadesService {
     public String[] getCategories () {
         String[] cat = {"SUSPENCION", "APERCIBIMIENTO", "ART", "LICENCIA POR ENFERMEDAD", 
         "LICENCIA POR EMBARAZO", "LICENCIA DE VACACIONES","DESPIDO", "DESPIDO UOCRA", "DESPIDO EN PERIODO DE PRUEBA", 
-        "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA","AUSENTE"};
+        "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA","AUSENTE","ALTA DE LEGAJO"};
         return cat;
     }
 
