@@ -38,7 +38,7 @@ public class AltaService {
         AltaRepo.save(alta);
         emailSender.sendEmailActionNovedad(usuario.getEmail(), 
         novedad.getNumero(), novedad.getCategoria(), alta.getFecha(),
-        "Alta de Legajo", "Legajo nuevo creado "+alta.getLegajo()+".");
+        "Alta de Legajo", "Legajo nuevo creado "+alta.getLegajo()+".",novedad.getNovedad_id());
         return "Alta creada";
     }
 }

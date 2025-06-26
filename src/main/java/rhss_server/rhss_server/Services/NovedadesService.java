@@ -76,7 +76,7 @@ public class NovedadesService {
         novedad.setTelefono(data.telefono);
         novedad.setEmail(data.email);
         NovedadRepo.save(novedad);
-        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa);
+        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa,novedad.getNovedad_id());
         return "Novedad creada, numero "+novedad.getNumero();
 
     }

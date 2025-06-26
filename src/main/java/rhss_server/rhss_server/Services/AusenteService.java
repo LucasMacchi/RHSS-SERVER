@@ -39,7 +39,7 @@ public class AusenteService {
         NovedadesModel novedad = NovedadRepo.findById(data.novedad_id).get();
         UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
         emailSender.sendEmailActionNovedad(usuario.getEmail(), novedad.getNumero(),
-        novedad.getCategoria(), novedad.getFecha(), "Ausente", data.causa);
+        novedad.getCategoria(), novedad.getFecha(), "Ausente", data.causa,novedad.getNovedad_id());
         return "Ausente creado en legajo "+data.legajo; 
     }
     
