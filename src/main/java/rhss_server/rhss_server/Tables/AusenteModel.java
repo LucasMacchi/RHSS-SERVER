@@ -24,7 +24,14 @@ public class AusenteModel {
 
     private int legajo;
     private String causa;
+    private String categoria;
 
+    public String getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }

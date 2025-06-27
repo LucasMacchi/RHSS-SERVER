@@ -44,7 +44,12 @@ public class AusenteControllers {
 
     @PostMapping("/create")
     public String createAusente(@Valid @RequestBody AusenteDto data) {
-        return this.service.postAusente(data);
+        return this.service.postAusente(data, "Ausente");
+    }
+
+    @PostMapping("/late/create")
+    public String createLate(@Valid @RequestBody AusenteDto data) {
+        return this.service.postAusente(data, "Tardanza");
     }
 
     @GetMapping("/novedad/{id}")

@@ -26,7 +26,7 @@ public class AusenteService {
     @Autowired
     private EmailSender emailSender;
 
-    public String postAusente (AusenteDto data) {
+    public String postAusente (AusenteDto data, String categoria) {
         LocalDate current = LocalDate.now();
         AusenteModel ausente = new AusenteModel();
         ausente.setCausa(data.causa);
@@ -34,12 +34,13 @@ public class AusenteService {
         ausente.setFecha_ausentada(data.fecha_ausente);
         ausente.setJustificado(data.justificado);
         ausente.setLegajo(data.legajo);
+        ausente.setCategoria(categoria);
         ausente.setNovedad_id(data.novedad_id);
         AusenteRepo.save(ausente);
         NovedadesModel novedad = NovedadRepo.findById(data.novedad_id).get();
         UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
         emailSender.sendEmailActionNovedad(usuario.getEmail(), novedad.getNumero(),
-        novedad.getCategoria(), novedad.getFecha(), "Ausente", data.causa,novedad.getNovedad_id());
+        novedad.getCategoria(), novedad.getFecha(), categoria, data.causa,novedad.getNovedad_id());
         return "Ausente creado en legajo "+data.legajo; 
     }
     
