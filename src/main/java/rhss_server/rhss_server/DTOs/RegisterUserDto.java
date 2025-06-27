@@ -25,4 +25,7 @@ public class RegisterUserDto {
 
     @NotNull(message = "Ingrese un nombre de usuario")
     public String username;
+
+    @NotNull(message = "Ingrese una contrasena valida")
+    public String password;
 }

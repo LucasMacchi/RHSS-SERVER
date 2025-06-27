@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import rhss_server.rhss_server.DTOs.LoginDto;
 import rhss_server.rhss_server.DTOs.RegisterUserDto;
 import rhss_server.rhss_server.Services.UserService;
 import rhss_server.rhss_server.Tables.UsuarioModel;
@@ -37,9 +38,9 @@ public class UserControllers {
     @Autowired
     private UserService service;
 
-    @PostMapping("/login/{username}")
-    public String login(@PathVariable String username, HttpSession session) {
-        return this.service.loginSession(username, session);
+    @PostMapping("/login")
+    public String login(@Valid @RequestBody LoginDto data, HttpSession session) {
+        return this.service.loginSession(data, session);
     }
     @GetMapping("/session")
     public SessionCheck getSession(HttpSession session) {

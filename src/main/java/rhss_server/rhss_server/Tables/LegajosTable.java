@@ -17,6 +17,13 @@ public class LegajosTable {
     private String sector;
     private String direccion;
     private LocalDate fecha_egreso;
+    private String empresa;
+    //private String email;
+    //private int telefono;
+
+    public String getEmpresa() {
+        return empresa;
+    }
     public long getCuil() {
         return cuil;
     }

@@ -34,7 +34,7 @@ public class NovedadesModel {
         String dateShrt = new dateShorter(current).getMonth();
         final int nro = (int) Math.floor(Math.random() * 100000);
         
-        this.numero = nro + "-" + dateShrt;
+        this.numero = nro + dateShrt;
     }
 
     public void setCausa(String causa) {

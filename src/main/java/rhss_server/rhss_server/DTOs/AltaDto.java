@@ -11,9 +11,6 @@ public class AltaDto {
     @NotNull(message = "Necesita una novedad.")
     @Min(value = 1)
     public long novedad;
-    @NotNull(message = "Necesita un Legajo valido.")
-    @Min(value = 1)
-    public int legajo;
     @NotNull(message = "Necesita un CUIT valido.")
     @Min(value = 1)
     public long cuit;

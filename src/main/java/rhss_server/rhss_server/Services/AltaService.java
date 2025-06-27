@@ -30,7 +30,6 @@ public class AltaService {
         alta.setDireccion(data.direccion);
         alta.setFecha_ingreso(data.fecha_ingreso);
         alta.setJornada(data.jornada);
-        alta.setLegajo(data.legajo);
         alta.setLugar(data.lugar);
         alta.setNacimiento(data.nacimiento);
         alta.setNovedad(data.novedad);
@@ -38,7 +37,7 @@ public class AltaService {
         AltaRepo.save(alta);
         emailSender.sendEmailActionNovedad(usuario.getEmail(), 
         novedad.getNumero(), novedad.getCategoria(), alta.getFecha(),
-        "Alta de Legajo", "Legajo nuevo creado "+alta.getLegajo()+".",novedad.getNovedad_id());
+        "Alta de Legajo", "Legajo nuevo creado.",novedad.getNovedad_id());
         return "Alta creada";
     }
 }

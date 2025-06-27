@@ -18,7 +18,6 @@ public class AltaTable {
     @Column(name = "novedad_id")
     private long novedad;
     private long cuit;
-    private int legajo;
     private LocalDate fecha = LocalDate.now();
     private LocalDate fecha_ingreso;
     private String direccion;
@@ -47,9 +46,6 @@ public class AltaTable {
     public short getJornada() {
         return jornada;
     }
-    public int getLegajo() {
-        return legajo;
-    }
     public String getLugar() {
         return lugar;
     }
@@ -70,9 +66,6 @@ public class AltaTable {
     }
     public void setJornada(short jornada) {
         this.jornada = jornada;
-    }
-    public void setLegajo(int legajo) {
-        this.legajo = legajo;
     }
     public void setLugar(String lugar) {
         this.lugar = lugar;
