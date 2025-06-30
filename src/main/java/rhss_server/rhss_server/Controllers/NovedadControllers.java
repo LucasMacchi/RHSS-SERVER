@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.DTOs.NovedadDto;
@@ -43,8 +45,20 @@ public class NovedadControllers {
     }
     
     @PostMapping("/create")
-    public String createNovedad(@Valid @RequestBody NovedadDto data) {
-        return this.service.postNovedad(data);
+    public String createNovedad(@RequestParam("causa") String causa, @RequestParam("solicitante") String solicitante,
+    @RequestParam("empresa_id") byte empresa_id, @RequestParam("legajo") short legajo,
+    @RequestParam("categoria") String categoria, @RequestParam("email") String email,
+    @RequestParam("telefono") String telefono, @RequestParam(value = "archivos",required = false) List<MultipartFile> adjuntos) {
+        NovedadDto data = new NovedadDto();
+        data.causa = causa;
+        data.solicitante = solicitante;
+        data.empresa_id = empresa_id;
+        data.legajo = legajo;
+        data.categoria = categoria;
+        data.email = email;
+        data.telefono = telefono;
+        System.err.println("ADJUNTOS ===> "+adjuntos);
+        return this.service.postNovedad(data, adjuntos);
     }
 
     @PostMapping("/all")

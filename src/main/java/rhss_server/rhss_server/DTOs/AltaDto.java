@@ -19,9 +19,8 @@ public class AltaDto {
     public String direccion;
     @NotNull(message = "Necesita una fecha de nacimiento valido.")
     public LocalDate nacimiento;
-    @NotNull(message = "Necesita una jornada valida.")
-    @Min(value = 1)
-    public short jornada;
+    @NotEmpty(message = "Necesita una jornada valida.")
+    public String jornada;
     @NotEmpty(message = "Necesita un lugar de trabajo valido.")
     public String lugar;
     @NotEmpty(message = "Ingrese una categoria valida")

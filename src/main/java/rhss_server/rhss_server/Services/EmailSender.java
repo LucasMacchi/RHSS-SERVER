@@ -1,12 +1,18 @@
 package rhss_server.rhss_server.Services;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class EmailSender {
@@ -21,22 +27,41 @@ public class EmailSender {
     private JavaMailSender mailSender;
 
     public void sendEmailNewNovedad(String to, String numero, String cate,
-     int legajo, String causa, long novedad_id) {
+     int legajo, String causa, long novedad_id, List<MultipartFile> adjuntos) {
         final String novedadLink = frontUrl+"/Novedad/"+novedad_id;
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailSys);
-        message.setTo(to);
-        message.setSubject("Novedad "+cate+" - "+numero);
-        message.setText("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+noReplay);
-        mailSender.send(message);
-        SimpleMailMessage message2 = new SimpleMailMessage();
-        message2.setFrom(emailSys);
-        message2.setTo(emailRRHH);
-        message2.setSubject("Novedad "+cate+" - "+numero);
-        message2.setText("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay);
-        mailSender.send(message2);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessage mimeMessage2 = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            MimeMessageHelper message2 = new MimeMessageHelper(mimeMessage2, true, "UTF-8");
+            message.setFrom(emailSys);
+            message.setTo(to);
+            message.setSubject("Novedad "+cate+" - "+numero);
+            message.setText("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+noReplay);
+            mailSender.send(mimeMessage);
+            if(adjuntos != null){
+                System.err.println("Archivos existen");
+                for (MultipartFile archivo : adjuntos) {
+                    final String name = archivo.getOriginalFilename();
+                    if(name != null && !name.isBlank()){
+                        message2.addAttachment(name, archivo);
+                    }
+
+                }
+            }
+            message2.setFrom(emailSys);
+            message2.setTo(emailRRHH);
+            message2.setSubject("Novedad "+cate+" - "+numero);
+            message2.setText("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay);
+            mailSender.send(mimeMessage2);
+            
+        } catch (Exception e) {
+            System.err.println("No se pudo enviar el mail: " + e.getMessage());
+        }
+
     }
 
+    @Async
     public void sendEmailCloseNovedad(String to, String numero,String cate,LocalDate createdDate) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailSys);
@@ -52,6 +77,7 @@ public class EmailSender {
         mailSender.send(message2);
     }
 
+    @Async
     public void sendEmailReopenNovedad(String to, String numero,String cate,LocalDate createdDate) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailSys);
@@ -67,7 +93,8 @@ public class EmailSender {
         message2.setText("La novedad creada en la fecha "+createdDate+" fue reabierta el "+LocalDate.now()+"."+noReplay);
         mailSender.send(message2);
     }
-        public void sendEmailActionNovedad(String to, String numero,String cate,LocalDate createdDate, String accion, String info, long novedad_id) {
+        @Async
+    public void sendEmailActionNovedad(String to, String numero,String cate,LocalDate createdDate, String accion, String info, long novedad_id) {
         final String novedadLink = frontUrl+"/Novedad/"+novedad_id;
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailSys);

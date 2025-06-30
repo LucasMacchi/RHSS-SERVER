@@ -22,7 +22,7 @@ public class AltaTable {
     private LocalDate fecha_ingreso;
     private String direccion;
     private LocalDate nacimiento;
-    private short jornada;
+    private String jornada;
     private String lugar;
     private String categoria;
     public long getAlta_id() {
@@ -43,7 +43,7 @@ public class AltaTable {
     public LocalDate getFecha_ingreso() {
         return fecha_ingreso;
     }
-    public short getJornada() {
+    public String getJornada() {
         return jornada;
     }
     public String getLugar() {
@@ -64,7 +64,7 @@ public class AltaTable {
     public void setFecha_ingreso(LocalDate fecha_ingreso) {
         this.fecha_ingreso = fecha_ingreso;
     }
-    public void setJornada(short jornada) {
+    public void setJornada(String jornada) {
         this.jornada = jornada;
     }
     public void setLugar(String lugar) {

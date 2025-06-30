@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import rhss_server.rhss_server.DTOs.NovedadDto;
@@ -56,7 +57,7 @@ public class NovedadesService {
     @Autowired
     private EmailSender emailSender;
 
-    public String postNovedad (NovedadDto data) {
+    public String postNovedad (NovedadDto data, List<MultipartFile> adjuntos ) {
         LocalDate current = LocalDate.now();
         NovedadesModel novedad = new NovedadesModel();
         UsuarioModel user = UsuarioRepo.findByUsername(data.solicitante).get();
@@ -76,7 +77,7 @@ public class NovedadesService {
         novedad.setTelefono(data.telefono);
         novedad.setEmail(data.email);
         NovedadRepo.save(novedad);
-        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa,novedad.getNovedad_id());
+        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa,novedad.getNovedad_id(), adjuntos);
         return "Novedad creada, numero "+novedad.getNumero();
 
     }
