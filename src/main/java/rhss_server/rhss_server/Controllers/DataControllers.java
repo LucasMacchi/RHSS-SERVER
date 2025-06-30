@@ -25,6 +25,7 @@ import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
 import rhss_server.rhss_server.DTOs.DeleteFileDto;
 import rhss_server.rhss_server.DTOs.EmpresaDto;
+import rhss_server.rhss_server.DTOs.LegajosDto;
 import rhss_server.rhss_server.Services.DataService;
 
 import java.util.HashMap;
@@ -72,9 +73,10 @@ public class DataControllers {
         return service.createEmpresa(body);
     }
 
-    @GetMapping("/empresa/legajos/{empresa}")
-    public List<LegajosTable> getAllLegajos(@PathVariable String empresa) {
-        return this.service.getAllLegajos(empresa);
+    @PostMapping("/empresa/legajos")
+    public List<LegajosTable> getAllLegajos(@Valid @RequestBody LegajosDto data) {
+        System.out.println(data.empresa);
+        return this.service.getAllLegajos(data.empresa);
     }
 
     @GetMapping("/legajos/{nombre}")
