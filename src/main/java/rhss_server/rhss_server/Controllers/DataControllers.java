@@ -72,9 +72,9 @@ public class DataControllers {
         return service.createEmpresa(body);
     }
 
-    @GetMapping("/legajos")
-    public List<LegajosTable> getAllLegajos() {
-        return this.service.getAllLegajos();
+    @GetMapping("/empresa/legajos/{empresa}")
+    public List<LegajosTable> getAllLegajos(@PathVariable String empresa) {
+        return this.service.getAllLegajos(empresa);
     }
 
     @GetMapping("/legajos/{nombre}")

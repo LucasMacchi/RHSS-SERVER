@@ -60,8 +60,8 @@ public class DataService {
         return String.format("Empresa %s Creada",body.nombre);
     }
 
-        public List<LegajosTable> getAllLegajos () {
-        List<LegajosTable> legajos = LegajoRepo.findAll();
+    public List<LegajosTable> getAllLegajos (String empresa) {
+        List<LegajosTable> legajos = LegajoRepo.findByEmpresa(empresa);
         return legajos;
     }
 
