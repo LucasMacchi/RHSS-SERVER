@@ -32,7 +32,7 @@ public class NovedadesModel {
     public NovedadesModel () {
         LocalDate current = LocalDate.now();
         String dateShrt = new dateShorter(current).getMonth();
-        final int nro = (int) Math.floor(Math.random() * 100000);
+        final int nro = (int) Math.floor(Math.random() * 10000);
         
         this.numero = nro + dateShrt;
     }
