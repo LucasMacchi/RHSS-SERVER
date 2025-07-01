@@ -20,18 +20,25 @@ public class AusenteModel {
     private LocalDate fecha_ausentada;
     
     @Column(name = "novedad_id")
-    private int novedad;
+    private long novedad;
 
     private int legajo;
     private String causa;
+    private String categoria;
 
+    public String getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
     public void setFecha_ausentada(LocalDate fecha_ausentada) {
         this.fecha_ausentada = fecha_ausentada;
     }
-    public void setNovedad_id(int novedad) {
+    public void setNovedad_id(long novedad) {
         this.novedad = novedad;
     }
     public void setJustificado(boolean justificado) {
@@ -49,7 +56,7 @@ public class AusenteModel {
     public LocalDate getFecha_ausentada() {
         return fecha_ausentada;
     }
-    public int getNovedad() {
+    public long getNovedad() {
         return novedad;
     }
     public boolean getJustificado() {

@@ -21,7 +21,7 @@ public class LicenciaTable {
     private String causa;
 
     @Column(name = "novedad_id")
-    private int novedad;
+    private long novedad;
 
     private String categoria;
 
@@ -43,7 +43,7 @@ public class LicenciaTable {
     public void setLegajo(int legajo) {
         this.legajo = legajo;
     }
-    public void setNovedad(int novedad) {
+    public void setNovedad(long novedad) {
         this.novedad = novedad;
     }
     public String getCategoria() {
@@ -67,7 +67,7 @@ public class LicenciaTable {
     public long getLicencia_id() {
         return licencia_id;
     }
-    public int getNovedad() {
+    public long getNovedad() {
         return novedad;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import rhss_server.rhss_server.DTOs.LoginDto;
 import rhss_server.rhss_server.DTOs.RegisterUserDto;
 import rhss_server.rhss_server.Services.UserService;
 import rhss_server.rhss_server.Tables.UsuarioModel;
@@ -36,15 +38,15 @@ public class UserControllers {
     @Autowired
     private UserService service;
 
-    @PostMapping("/login/{username}")
-    public String login(@PathVariable String username, HttpSession session) {
-        return this.service.loginSession(username, session);
+    @PostMapping("/login")
+    public String login(@Valid @RequestBody LoginDto data, HttpSession session) {
+        return this.service.loginSession(data, session);
     }
-    @PostMapping("/session")
+    @GetMapping("/session")
     public SessionCheck getSession(HttpSession session) {
         return this.service.getSession(session);
     }
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     public String logout(HttpSession session) {
         return this.service.logOutSession(session);
     }
@@ -54,18 +56,15 @@ public class UserControllers {
         return "User Route pinged at "+current;
     }
     @GetMapping("/all")
-    public List<UsuarioModel> getAllUsuarios (HttpSession session) {
-        new SessionCheck(session);
+    public List<UsuarioModel> getAllUsuarios () {
         return this.service.getAllUsuarios();
     }
     @GetMapping("/uniq/{id}")
-    public UsuarioModel getUser (@PathVariable String id,HttpSession session) {
-        new SessionCheck(session);
+    public UsuarioModel getUser (@PathVariable String id) {
         return this.service.getUniqUser(id);
     }
     @PostMapping("/registrar")
-    public String registerUser (@Valid @RequestBody RegisterUserDto data,HttpSession session) {
-        new SessionCheck(session).checkAdmin();;
+    public String registerUser (@Valid @RequestBody RegisterUserDto data) {
         return this.service.registerUser(data);
     }
     @PatchMapping("/activate/{id}")

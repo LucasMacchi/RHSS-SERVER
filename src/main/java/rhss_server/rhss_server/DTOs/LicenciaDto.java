@@ -23,7 +23,7 @@ public class LicenciaDto {
 
     @NotNull(message = "Necesita una novedad.")
     @Min(value = 1)
-    public int novedad;
+    public long novedad;
 
     @NotEmpty(message = "Necesita una categoria valida.")
     public String categoria;

@@ -23,5 +23,5 @@ public class PersonalDto {
 
     @NotNull(message = "Necesita una novedad.")
     @Min(value = 1)
-    public int novedad_id;
+    public long novedad_id;
 }

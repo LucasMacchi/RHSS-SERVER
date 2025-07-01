@@ -17,12 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.DTOs.LicenciaDto;
 import rhss_server.rhss_server.Services.LicenciaService;
 import rhss_server.rhss_server.Tables.LicenciaTable;
-import rhss_server.rhss_server.Utils.SessionCheck;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,38 +42,32 @@ public class LicenciaControllers {
     }
 
     @PostMapping("/create")
-    public String postLicencia(@Valid @RequestBody LicenciaDto data, HttpSession session) {
-        new SessionCheck(session);
+    public String postLicencia(@Valid @RequestBody LicenciaDto data) {
         return this.service.postLicencia(data);
     }
 
     @GetMapping("/all")
-    public List<LicenciaTable> getAllLic(HttpSession session) {
-        new SessionCheck(session);
+    public List<LicenciaTable> getAllLic() {
         return this.service.getAllLicencias();
     }
 
     @GetMapping("/legajo/{legajo}")
-    public List<LicenciaTable> getByLegajoLic(@PathVariable String legajo, HttpSession session) {
-        new SessionCheck(session);
+    public List<LicenciaTable> getByLegajoLic(@PathVariable String legajo) {
         return this.service.getAllByLegajo(Integer.parseInt(legajo));
     }
 
     @GetMapping("/novedad/{novedad}")
-    public List<LicenciaTable> getByNovLic(@PathVariable String novedad, HttpSession session) {
-        new SessionCheck(session);
+    public List<LicenciaTable> getByNovLic(@PathVariable String novedad) {
         return this.service.getAllByNov(Long.parseLong(novedad));
     }
 
     @GetMapping("/id/{id}")
-    public LicenciaTable getById(@PathVariable String id, HttpSession session) {
-        new SessionCheck(session);
+    public LicenciaTable getById(@PathVariable String id) {
         return this.service.getById(Long.parseLong(id));
     }
     
     @GetMapping("/categories")
-    public String[] getCategories(HttpSession session) {
-        new SessionCheck(session);
+    public String[] getCategories() {
         return this.service.getCategories();
     }
 

@@ -18,12 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import rhss_server.rhss_server.DTOs.AusenteDto;
 import rhss_server.rhss_server.Services.AusenteService;
 import rhss_server.rhss_server.Tables.AusenteModel;
-import rhss_server.rhss_server.Utils.SessionCheck;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,26 +43,27 @@ public class AusenteControllers {
     }
 
     @PostMapping("/create")
-    public String createAusente(@Valid @RequestBody AusenteDto data, HttpSession session) {
-        new SessionCheck(session);
-        return this.service.postAusente(data);
+    public String createAusente(@Valid @RequestBody AusenteDto data) {
+        return this.service.postAusente(data, "Ausente");
+    }
+
+    @PostMapping("/late/create")
+    public String createLate(@Valid @RequestBody AusenteDto data) {
+        return this.service.postAusente(data, "Tardanza");
     }
 
     @GetMapping("/novedad/{id}")
-    public List<AusenteModel> getAusenteNov (@PathVariable String id, HttpSession session) {
-        new SessionCheck(session);
+    public List<AusenteModel> getAusenteNov (@PathVariable String id) {
         return this.service.allAusentesByNovedad(Integer.parseInt(id));
     }
 
     @GetMapping("/legajo/{id}")
-    public List<AusenteModel> getAusenteLeg (@PathVariable String id, HttpSession session) {
-        new SessionCheck(session);
+    public List<AusenteModel> getAusenteLeg (@PathVariable String id) {
         return this.service.allAusentesByLegajo(Integer.parseInt(id));
     }
     
     @PatchMapping("/justificar/{id}")
-    public String justificarString (@PathVariable String id, HttpSession session) {
-        new SessionCheck(session);
+    public String justificarString (@PathVariable String id) {
         return this.service.justifyAusente(Long.parseLong(id));
     }
 

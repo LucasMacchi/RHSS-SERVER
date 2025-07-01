@@ -25,13 +25,16 @@ public class NovedadesModel {
     private LocalDate fecha;
     private String numero;
     private String categoria;
+    private Boolean cerrado;
+    private String email;
+    private String telefono;
 
     public NovedadesModel () {
         LocalDate current = LocalDate.now();
         String dateShrt = new dateShorter(current).getMonth();
-        final int nro = (int) Math.floor(Math.random() * 100000);
+        final int nro = (int) Math.floor(Math.random() * 10000);
         
-        this.numero = nro + "-" + dateShrt;
+        this.numero = nro + dateShrt;
     }
 
     public void setCausa(String causa) {
@@ -42,6 +45,12 @@ public class NovedadesModel {
     }
     public void setEmpresa_id(byte empresa_id) {
         this.empresa_id = empresa_id;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
     public void setFecha_creacion(LocalDate fecha) {
         this.fecha = fecha;
@@ -54,6 +63,9 @@ public class NovedadesModel {
     }
     public void setSolicitante(String solicitante) {
         this.solicitante = solicitante;
+    }
+    public void setCerrado(Boolean cerrado) {
+        this.cerrado = cerrado;
     }
     public String getCausa() {
         return causa;
@@ -81,6 +93,15 @@ public class NovedadesModel {
     }
     public long getNovedad_id() {
         return novedad_id;
+    }
+    public Boolean getCerrado() {
+        return cerrado;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getTelefono() {
+        return telefono;
     }
 
 }

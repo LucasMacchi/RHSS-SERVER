@@ -8,4 +8,6 @@ import rhss_server.rhss_server.Tables.LegajosTable;
 
 public interface ILegajoRepo extends JpaRepository<LegajosTable, Short>{
 
-    List<LegajosTable> findByFullnameContaining(String nombre);}
+    List<LegajosTable> findByFullnameContaining(String nombre);
+
+    List<LegajosTable> findByEmpresa(String empresa);}
