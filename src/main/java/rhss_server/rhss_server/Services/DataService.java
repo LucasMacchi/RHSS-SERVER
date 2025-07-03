@@ -123,9 +123,9 @@ public class DataService {
         Path pathfile = Path.of(data.url);
         try {
             boolean deleted = Files.deleteIfExists(pathfile);
+            ArchivoRepo.deleteById(data.archivo_id);
             if(deleted) {
                 System.out.println("Archivo elimnado");
-                ArchivoRepo.deleteById(data.archivo_id);
                 return "Archivo eliminado";
             }
             else{

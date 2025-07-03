@@ -93,7 +93,7 @@ public class EmailSender {
         message2.setText("La novedad creada en la fecha "+createdDate+" fue reabierta el "+LocalDate.now()+"."+noReplay);
         mailSender.send(message2);
     }
-        @Async
+    @Async
     public void sendEmailActionNovedad(String to, String numero,String cate,LocalDate createdDate, String accion, String info, long novedad_id) {
         final String novedadLink = frontUrl+"/Novedad/"+novedad_id;
         SimpleMailMessage message = new SimpleMailMessage();
@@ -108,5 +108,15 @@ public class EmailSender {
         message2.setSubject("Novedad "+cate+" - "+numero);
         message2.setText("Se tomo una nueva accion "+accion+" en la novedad creada el "+createdDate+".\nInformacion Adicional:\n"+info+"\nLink: "+novedadLink+noReplay);
         mailSender.send(message2);
+    }
+    @Async
+    public void sendEmailRegister(String to, LocalDate createdDate, String username, String pass) {
+        final String loginLink = frontUrl+"/login";
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(emailSys);
+        message.setTo(to);
+        message.setSubject("Usuario Registrado para el Sistema Gestor de Novedades (SGN)");
+        message.setText("Se creo un nuevo usuario vinculado con este correo electronico:\nNombre de usuario: "+username+"\nContraseña: "+pass+"\nFecha de registracion: "+createdDate+"\nPuedes acceder al sistema desde el siguiente link: "+loginLink+"\n"+noReplay);
+        mailSender.send(message);
     }
 }
