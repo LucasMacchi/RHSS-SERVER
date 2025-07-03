@@ -21,6 +21,8 @@ import rhss_server.rhss_server.Tables.UsuarioModel;
 public class UserService {
 
     @Autowired
+    private EmailSender emailSender;
+    @Autowired
     private IUsuarioRepo UsuarioRepo;
     @Autowired
     private IEmpresasRepo EmpresaRepo;
@@ -43,6 +45,7 @@ public class UserService {
         user.setActivado(false);
         user.setPassword(data.password);
         UsuarioRepo.save(user);
+        emailSender.sendEmailRegister(user.getEmail(), user.getFecha_creacion(), user.getUsername(), user.getPassword());
         return "Usuario "+data.username+" creado";
     }
 
