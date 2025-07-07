@@ -27,7 +27,7 @@ public class EmailSender {
     private JavaMailSender mailSender;
 
     public void sendEmailNewNovedad(String to, String numero, String cate,
-     int legajo, String causa, long novedad_id, List<MultipartFile> adjuntos) {
+     int legajo, String causa, long novedad_id, List<MultipartFile> adjuntos, boolean tuicha) {
         final String novedadLink = frontUrl+"/Novedad/"+novedad_id;
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessage mimeMessage2 = mailSender.createMimeMessage();
@@ -54,7 +54,7 @@ public class EmailSender {
             message2.setSubject("Novedad "+cate+" - "+numero);
             message2.setText("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay);
             mailSender.send(mimeMessage2);
-            
+            System.out.println(emailRRHH);
         } catch (Exception e) {
             System.err.println("No se pudo enviar el mail: " + e.getMessage());
         }
