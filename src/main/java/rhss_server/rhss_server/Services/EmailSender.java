@@ -49,6 +49,7 @@ public class EmailSender {
 
                 }
             }
+            System.out.println("RRHH EMAIL");
             message2.setFrom(emailSys);
             message2.setTo(emailRRHH);
             message2.setSubject("Novedad "+cate+" - "+numero);
