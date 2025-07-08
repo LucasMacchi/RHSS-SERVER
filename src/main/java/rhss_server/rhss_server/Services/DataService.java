@@ -65,6 +65,11 @@ public class DataService {
         return legajos;
     }
 
+    public List<LegajosTable> getAllLegajosNoEmp () {
+        List<LegajosTable> legajos = LegajoRepo.findAllActivated();
+        return legajos;
+    }
+
 
     public List<LegajosTable> getLegajos (String nombre) {
         List<LegajosTable> legajos = LegajoRepo.findByFullnameContaining(nombre);

@@ -75,8 +75,12 @@ public class DataControllers {
 
     @PostMapping("/empresa/legajos")
     public List<LegajosTable> getAllLegajos(@Valid @RequestBody LegajosDto data) {
-        System.out.println(data.empresa);
         return this.service.getAllLegajos(data.empresa);
+    }
+
+    @GetMapping("/all/legajos")
+    public List<LegajosTable> getAllLegajosNoEmpresa() {
+        return this.service.getAllLegajosNoEmp();
     }
 
     @GetMapping("/legajos/{nombre}")
