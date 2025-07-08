@@ -23,11 +23,15 @@ public class EmailSender {
     private String emailSys;
     @Value("${FRONT_URL}")
     private String frontUrl;
+    @Value("${EMAIL_RRHH_TUICHA}")
+    private String emailTuicha;
+    @Value("${TUICHA_ID}")
+    private int tuichaId;
     @Autowired
     private JavaMailSender mailSender;
 
     public void sendEmailNewNovedad(String to, String numero, String cate,
-     int legajo, String causa, long novedad_id, List<MultipartFile> adjuntos, boolean tuicha) {
+     int legajo, String causa, long novedad_id, List<MultipartFile> adjuntos,byte empresa) {
         final String novedadLink = frontUrl+"/Novedad/"+novedad_id;
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessage mimeMessage2 = mailSender.createMimeMessage();
@@ -49,13 +53,12 @@ public class EmailSender {
 
                 }
             }
-            System.out.println("RRHH EMAIL");
             message2.setFrom(emailSys);
             message2.setTo(emailRRHH);
+            if(empresa == tuichaId) message2.setCc(emailTuicha);
             message2.setSubject("Novedad "+cate+" - "+numero);
             message2.setText("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay);
             mailSender.send(mimeMessage2);
-            System.out.println(emailRRHH);
         } catch (Exception e) {
             System.err.println("No se pudo enviar el mail: " + e.getMessage());
         }
@@ -63,7 +66,7 @@ public class EmailSender {
     }
 
     @Async
-    public void sendEmailCloseNovedad(String to, String numero,String cate,LocalDate createdDate) {
+    public void sendEmailCloseNovedad(String to, String numero,String cate,LocalDate createdDate, byte empresa) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailSys);
         message.setTo(to);
@@ -73,13 +76,14 @@ public class EmailSender {
         SimpleMailMessage message2 = new SimpleMailMessage();
         message2.setFrom(emailSys);
         message2.setTo(emailRRHH);
+        if(empresa == tuichaId) message2.setCc(emailTuicha);
         message2.setSubject("Novedad "+cate+" - "+numero);
         message2.setText("La novedad creada en la fecha "+createdDate+" fue cerrada el "+LocalDate.now()+"."+noReplay);
         mailSender.send(message2);
     }
 
     @Async
-    public void sendEmailReopenNovedad(String to, String numero,String cate,LocalDate createdDate) {
+    public void sendEmailReopenNovedad(String to, String numero,String cate,LocalDate createdDate, byte empresa) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailSys);
         message.setTo(to);
@@ -90,12 +94,13 @@ public class EmailSender {
         SimpleMailMessage message2 = new SimpleMailMessage();
         message2.setFrom(emailSys);
         message2.setTo(emailRRHH);
+        if(empresa == tuichaId) message2.setCc(emailTuicha);
         message2.setSubject("Novedad "+cate+" - "+numero);
         message2.setText("La novedad creada en la fecha "+createdDate+" fue reabierta el "+LocalDate.now()+"."+noReplay);
         mailSender.send(message2);
     }
     @Async
-    public void sendEmailActionNovedad(String to, String numero,String cate,LocalDate createdDate, String accion, String info, long novedad_id) {
+    public void sendEmailActionNovedad(String to, String numero,String cate,LocalDate createdDate, String accion, String info, long novedad_id, byte empresa) {
         final String novedadLink = frontUrl+"/Novedad/"+novedad_id;
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(emailSys);
@@ -106,6 +111,7 @@ public class EmailSender {
         SimpleMailMessage message2 = new SimpleMailMessage();
         message2.setFrom(emailSys);
         message2.setTo(emailRRHH);
+        if(empresa == tuichaId) message2.setCc(emailTuicha);
         message2.setSubject("Novedad "+cate+" - "+numero);
         message2.setText("Se tomo una nueva accion "+accion+" en la novedad creada el "+createdDate+".\nInformacion Adicional:\n"+info+"\nLink: "+novedadLink+noReplay);
         mailSender.send(message2);
