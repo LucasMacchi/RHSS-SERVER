@@ -77,7 +77,7 @@ public class NovedadesService {
         novedad.setTelefono(data.telefono);
         novedad.setEmail(data.email);
         NovedadRepo.save(novedad);
-        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa,novedad.getNovedad_id(), adjuntos, false);
+        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa,novedad.getNovedad_id(), adjuntos, novedad.getEmpresa_id());
         return "Novedad creada, numero "+novedad.getNumero();
 
     }
@@ -178,13 +178,13 @@ public class NovedadesService {
                 novedad.setCerrado(false);
                 NovedadRepo.save(novedad);
                 emailSender.sendEmailReopenNovedad(usuario.getEmail(), 
-                novedad.getNumero(),novedad.getCategoria(),novedad.getFecha());
+                novedad.getNumero(),novedad.getCategoria(),novedad.getFecha(), novedad.getEmpresa_id());
             }
             else {
                 novedad.setCerrado(true);
                 NovedadRepo.save(novedad);
                 emailSender.sendEmailCloseNovedad(usuario.getEmail(), novedad.getNumero(),
-                novedad.getCategoria(),novedad.getFecha());
+                novedad.getCategoria(),novedad.getFecha(), novedad.getEmpresa_id());
             }
             return "Estado cambiado.";
         } catch (Exception e) {

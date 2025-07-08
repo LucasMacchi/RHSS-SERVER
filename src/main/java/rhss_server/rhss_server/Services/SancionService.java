@@ -47,7 +47,7 @@ public class SancionService {
         NovedadesModel novedad = NovedadRepo.findById(data.novedad_id).get();
         UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
         emailSender.sendEmailActionNovedad(usuario.getEmail(), novedad.getNumero(),
-            novedad.getCategoria(), novedad.getFecha(), data.tipo, info, novedad.getNovedad_id());
+            novedad.getCategoria(), novedad.getFecha(), data.tipo, info, novedad.getNovedad_id(), novedad.getEmpresa_id());
         return "Sancion creada";
     }
 

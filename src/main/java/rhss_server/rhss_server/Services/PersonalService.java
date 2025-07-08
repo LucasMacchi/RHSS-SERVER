@@ -40,7 +40,7 @@ public class PersonalService {
         NovedadesModel novedad = NovedadRepo.findById(data.novedad_id).get();
         UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
         emailSender.sendEmailActionNovedad(usuario.getEmail(), novedad.getNumero(),
-            novedad.getCategoria(), novedad.getFecha(), data.categoria, data.causa, novedad.getNovedad_id());
+            novedad.getCategoria(), novedad.getFecha(), data.categoria, data.causa, novedad.getNovedad_id(), novedad.getEmpresa_id());
         return "Informe de personal creado";
     }
 
