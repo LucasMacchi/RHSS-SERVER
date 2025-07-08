@@ -17,7 +17,7 @@ public class NovedadesModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long novedad_id;
     private String solicitante;
-    private short legajo;
+    private long legajo;
     private String causa;
     private byte empresa_id;
     private long usuario_id;
@@ -58,7 +58,7 @@ public class NovedadesModel {
     public void setUsuario_id(long usuario_id) {
         this.usuario_id = usuario_id;
     }
-    public void setLegajo(short legajo) {
+    public void setLegajo(long legajo) {
         this.legajo = legajo;
     }
     public void setSolicitante(String solicitante) {
@@ -73,7 +73,7 @@ public class NovedadesModel {
     public LocalDate getFecha() {
         return fecha;
     }
-    public short getLegajo() {
+    public long getLegajo() {
         return legajo;
     }
     public String getSolicitante() {

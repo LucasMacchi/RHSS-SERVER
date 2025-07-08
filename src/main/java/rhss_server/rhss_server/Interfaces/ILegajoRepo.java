@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import rhss_server.rhss_server.Tables.LegajosTable;
 
-public interface ILegajoRepo extends JpaRepository<LegajosTable, Short>{
+public interface ILegajoRepo extends JpaRepository<LegajosTable, Long>{
 
     List<LegajosTable> findByFullnameContaining(String nombre);
 

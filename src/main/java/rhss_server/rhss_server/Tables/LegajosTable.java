@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 public class LegajosTable {
     
     @Id
-    private short legajo;
+    private long legajo;
     private String fullname;
     private long cuil;
     private String sector;
@@ -30,7 +30,7 @@ public class LegajosTable {
     public String getFullname() {
         return fullname;
     }
-    public short getLegajo() {
+    public long getLegajo() {
         return legajo;
     }
     public String getSector() {
@@ -54,7 +54,7 @@ public class LegajosTable {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
-    public void setLegajo(short legajo) {
+    public void setLegajo(long legajo) {
         this.legajo = legajo;
     }
     public void setSector(String sector) {
