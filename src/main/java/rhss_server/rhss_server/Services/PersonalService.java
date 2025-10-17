@@ -65,7 +65,7 @@ public class PersonalService {
     }
 
     public String[] getCategories() {
-        String[] cat = {"DESPIDO", "DESPIDO UOCRA", "DESPIDO EN PERIODO DE PRUEBA", "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA"};
+        String[] cat = {"DESPIDO", "DESPIDO UOCRA", "DESPIDO EN PERIODO DE PRUEBA", "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA", "RENUNCIA"};
         return cat;
     }
 
