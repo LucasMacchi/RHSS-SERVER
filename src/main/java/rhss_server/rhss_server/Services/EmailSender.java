@@ -1,18 +1,20 @@
 package rhss_server.rhss_server.Services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.resend.*;
+import com.resend.core.exception.ResendException;
+import com.resend.services.emails.model.Attachment;
+import com.resend.services.emails.model.CreateEmailOptions;
+import com.resend.services.emails.model.CreateEmailResponse;
 
-import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class EmailSender {
@@ -25,105 +27,121 @@ public class EmailSender {
     private String frontUrl;
     @Value("${EMAIL_RRHH_TUICHA}")
     private String emailTuicha;
+    @Value("${API_KEY_RESEND}")
+    private String API_KEY;
     @Value("${TUICHA_ID}")
     private int tuichaId;
-    @Autowired
-    private JavaMailSender mailSender;
 
     public void sendEmailNewNovedad(String to, String numero, String cate,
      int legajo, String causa, long novedad_id, List<MultipartFile> adjuntos,byte empresa) {
         final String novedadLink = frontUrl+"/Novedad/"+novedad_id;
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessage mimeMessage2 = mailSender.createMimeMessage();
+        Resend resend = new Resend(API_KEY);
+        List<Attachment> adjuntosMail = new ArrayList<Attachment>();
         try {
-            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            MimeMessageHelper message2 = new MimeMessageHelper(mimeMessage2, true, "UTF-8");
-            message.setFrom(emailSys);
-            message.setTo(to);
-            message.setSubject("Novedad "+cate+" - "+numero);
-            message.setText("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+noReplay);
-            mailSender.send(mimeMessage);
             if(adjuntos != null){
-                System.err.println("Archivos existen");
+                System.out.println("Archivos existen");
                 for (MultipartFile archivo : adjuntos) {
                     final String name = archivo.getOriginalFilename();
                     if(name != null && !name.isBlank()){
-                        message2.addAttachment(name, archivo);
+                        String base64Ar = Base64.getEncoder().encodeToString(archivo.getBytes());
+                        Attachment att = Attachment.builder().fileName(name).content(base64Ar).build();
+                        adjuntosMail.add(att);
                     }
 
                 }
             }
-            message2.setFrom(emailSys);
-            message2.setTo(emailRRHH);
-            if(empresa == tuichaId) message2.setCc(emailTuicha);
-            message2.setSubject("Novedad "+cate+" - "+numero);
-            message2.setText("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay);
-            mailSender.send(mimeMessage2);
         } catch (Exception e) {
-            System.err.println("No se pudo enviar el mail: " + e.getMessage());
+            e.printStackTrace();
+        }
+        CreateEmailOptions params = CreateEmailOptions.builder()
+        .from(emailSys).to(to).subject("Novedad "+cate+" - "+numero).text("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+noReplay)
+        .attachments(adjuntosMail.size() > 0 ? adjuntosMail : null ).build();
+        
+        CreateEmailOptions params2;
+        if(empresa == tuichaId) {
+            params2 = CreateEmailOptions.builder()
+            .from(emailSys).to(emailRRHH).subject("Novedad "+cate+" - "+numero).text("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay).build();
+        }
+        else {
+            params2 = CreateEmailOptions.builder()
+            .from(emailSys).to(emailRRHH).addCc(emailTuicha).subject("Novedad "+cate+" - "+numero).text("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay).build();
+        }
+        try {
+            CreateEmailResponse data = resend.emails().send(params);
+            CreateEmailResponse data2 = resend.emails().send(params2);
+            System.out.println(data.getId());
+            System.out.println(data2.getId());
+        } catch (ResendException e) {
+            e.printStackTrace();
         }
 
     }
 
     @Async
     public void sendEmailCloseNovedad(String to, String numero,String cate,LocalDate createdDate, byte empresa) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailSys);
-        message.setTo(to);
-        message.setSubject("Novedad "+cate+" - "+numero);
-        message.setText("La novedad creada en la fecha "+createdDate+" fue cerrada el "+LocalDate.now()+"."+noReplay);
-        mailSender.send(message);
-        SimpleMailMessage message2 = new SimpleMailMessage();
-        message2.setFrom(emailSys);
-        message2.setTo(emailRRHH);
-        if(empresa == tuichaId) message2.setCc(emailTuicha);
-        message2.setSubject("Novedad "+cate+" - "+numero);
-        message2.setText("La novedad creada en la fecha "+createdDate+" fue cerrada el "+LocalDate.now()+"."+noReplay);
-        mailSender.send(message2);
+        Resend resend = new Resend(API_KEY);
+        CreateEmailOptions params = CreateEmailOptions.builder()
+        .from(emailSys).to(to).subject("Novedad "+cate+" - "+numero).text("La novedad creada en la fecha "+createdDate+" fue cerrada el "+LocalDate.now()+"."+noReplay).build();
+        
+        CreateEmailOptions params2;
+        if(empresa == tuichaId) {
+            params2 = CreateEmailOptions.builder()
+            .from(emailSys).to(emailRRHH).subject("Novedad "+cate+" - "+numero).text("La novedad creada en la fecha "+createdDate+" fue cerrada el "+LocalDate.now()+"."+noReplay).build();
+        }
+        else {
+            params2 = CreateEmailOptions.builder()
+            .from(emailSys).to(emailRRHH).addCc(emailTuicha).subject("Novedad "+cate+" - "+numero).text("La novedad creada en la fecha "+createdDate+" fue cerrada el "+LocalDate.now()+"."+noReplay).build();
+        }
+        try {
+            CreateEmailResponse data = resend.emails().send(params);
+            CreateEmailResponse data2 = resend.emails().send(params2);
+            System.out.println(data.getId());
+            System.out.println(data2.getId());
+        } catch (ResendException e) {
+            e.printStackTrace();
+        }
     }
 
     @Async
     public void sendEmailReopenNovedad(String to, String numero,String cate,LocalDate createdDate, byte empresa) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailSys);
-        message.setTo(to);
-        message.setSubject("Novedad "+cate+" - "+numero);
-        message.setText("La novedad creada en la fecha "+createdDate+" fue reabierta el "+LocalDate.now()+"."+noReplay);
-        message.setCc(emailRRHH);
-        mailSender.send(message);
-        SimpleMailMessage message2 = new SimpleMailMessage();
-        message2.setFrom(emailSys);
-        message2.setTo(emailRRHH);
-        if(empresa == tuichaId) message2.setCc(emailTuicha);
-        message2.setSubject("Novedad "+cate+" - "+numero);
-        message2.setText("La novedad creada en la fecha "+createdDate+" fue reabierta el "+LocalDate.now()+"."+noReplay);
-        mailSender.send(message2);
+        System.out.println("Novedad reabierta");
     }
     @Async
     public void sendEmailActionNovedad(String to, String numero,String cate,LocalDate createdDate, String accion, String info, long novedad_id, byte empresa) {
+        Resend resend = new Resend(API_KEY);
         final String novedadLink = frontUrl+"/Novedad/"+novedad_id;
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailSys);
-        message.setTo(to);
-        message.setSubject("Novedad "+cate+" - "+numero);
-        message.setText("Se tomo una nueva accion "+accion+" en la novedad creada el "+createdDate+".\nInformacion Adicional:\n"+info+noReplay);
-        mailSender.send(message);
-        SimpleMailMessage message2 = new SimpleMailMessage();
-        message2.setFrom(emailSys);
-        message2.setTo(emailRRHH);
-        if(empresa == tuichaId) message2.setCc(emailTuicha);
-        message2.setSubject("Novedad "+cate+" - "+numero);
-        message2.setText("Se tomo una nueva accion "+accion+" en la novedad creada el "+createdDate+".\nInformacion Adicional:\n"+info+"\nLink: "+novedadLink+noReplay);
-        mailSender.send(message2);
+        CreateEmailOptions params = CreateEmailOptions.builder()
+        .from(emailSys).to(to).subject("Novedad "+cate+" - "+numero).text("La novedad creada en la fecha "+createdDate+" fue cerrada el "+LocalDate.now()+"."+noReplay).build();
+        
+        CreateEmailOptions params2;
+        if(empresa == tuichaId) {
+            params2 = CreateEmailOptions.builder()
+            .from(emailSys).to(emailRRHH).subject("Novedad "+cate+" - "+numero).text("Se tomo una nueva accion "+accion+" en la novedad creada el "+createdDate+".\nInformacion Adicional:\n"+info+noReplay).build();
+        }
+        else {
+            params2 = CreateEmailOptions.builder()
+            .from(emailSys).to(emailRRHH).addCc(emailTuicha).subject("Novedad "+cate+" - "+numero).text("Se tomo una nueva accion "+accion+" en la novedad creada el "+createdDate+".\nInformacion Adicional:\n"+info+"\nLink: "+novedadLink+noReplay).build();
+        }
+        try {
+            CreateEmailResponse data = resend.emails().send(params);
+            CreateEmailResponse data2 = resend.emails().send(params2);
+            System.out.println(data.getId());
+            System.out.println(data2.getId());
+        } catch (ResendException e) {
+            e.printStackTrace();
+        }
     }
     @Async
     public void sendEmailRegister(String to, LocalDate createdDate, String username, String pass) {
+        Resend resend = new Resend(API_KEY);
         final String loginLink = frontUrl+"/login";
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailSys);
-        message.setTo(to);
-        message.setSubject("Usuario Registrado para el Sistema Gestor de Novedades (SGN)");
-        message.setText("Se creo un nuevo usuario vinculado con este correo electronico:\nNombre de usuario: "+username+"\nContraseña: "+pass+"\nFecha de registracion: "+createdDate+"\nPuedes acceder al sistema desde el siguiente link: "+loginLink+"\n"+noReplay);
-        mailSender.send(message);
+        CreateEmailOptions params = CreateEmailOptions.builder()
+        .from(emailSys).to(to).subject("Usuario Registrado para el Sistema Gestor de Novedades (SGN)").text("Se creo un nuevo usuario vinculado con este correo electronico:\nNombre de usuario: "+username+"\nContraseña: "+pass+"\nFecha de registracion: "+createdDate+"\nPuedes acceder al sistema desde el siguiente link: "+loginLink+"\n"+noReplay).build();
+        try {
+            CreateEmailResponse data = resend.emails().send(params);
+            System.out.println(data.getId());
+        } catch (ResendException e) {
+            e.printStackTrace();
+        }
     }
 }
