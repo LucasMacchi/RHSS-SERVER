@@ -55,16 +55,18 @@ public class EmailSender {
         }
         CreateEmailOptions params = CreateEmailOptions.builder()
         .from(emailSys).to(to).subject("Novedad "+cate+" - "+numero).text("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+noReplay)
-        .attachments(adjuntosMail.size() > 0 ? adjuntosMail : null ).build();
+        .build();
         
         CreateEmailOptions params2;
         if(empresa == tuichaId) {
             params2 = CreateEmailOptions.builder()
-            .from(emailSys).to(emailRRHH).subject("Novedad "+cate+" - "+numero).text("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay).build();
+            .from(emailSys).to(emailRRHH).subject("Novedad "+cate+" - "+numero).text("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay)
+            .attachments(adjuntosMail.size() > 0 ? adjuntosMail : null ).build();
         }
         else {
             params2 = CreateEmailOptions.builder()
-            .from(emailSys).to(emailRRHH).addCc(emailTuicha).subject("Novedad "+cate+" - "+numero).text("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay).build();
+            .from(emailSys).to(emailRRHH).addCc(emailTuicha).subject("Novedad "+cate+" - "+numero).text("Nueva novedad creada en el dia "+LocalDate.now()+". De categoria "+cate+" vinculado al legajo "+legajo+".\nCausa o Descripcion:\n"+causa+"\nLink: "+novedadLink+noReplay)
+            .attachments(adjuntosMail.size() > 0 ? adjuntosMail : null ).build();
         }
         try {
             CreateEmailResponse data = resend.emails().send(params);
