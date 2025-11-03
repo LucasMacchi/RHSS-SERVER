@@ -16,6 +16,7 @@ import rhss_server.rhss_server.DTOs.NovedadFilterDto;
 import rhss_server.rhss_server.Interfaces.IAltaRepo;
 import rhss_server.rhss_server.Interfaces.IArchivoRepo;
 import rhss_server.rhss_server.Interfaces.IAusenteRepo;
+import rhss_server.rhss_server.Interfaces.IEmpresasRepo;
 import rhss_server.rhss_server.Interfaces.ILegajoRepo;
 import rhss_server.rhss_server.Interfaces.ILicenciaRepo;
 import rhss_server.rhss_server.Interfaces.INovedadesRepo;
@@ -25,6 +26,7 @@ import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
 import rhss_server.rhss_server.Tables.AltaTable;
 import rhss_server.rhss_server.Tables.ArchivoModel;
 import rhss_server.rhss_server.Tables.AusenteModel;
+import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
 import rhss_server.rhss_server.Tables.LicenciaTable;
 import rhss_server.rhss_server.Tables.NovedadesModel;
@@ -56,6 +58,8 @@ public class NovedadesService {
     private IAltaRepo AltaRepo;
     @Autowired
     private EmailSender emailSender;
+    @Autowired
+    private IEmpresasRepo EmpresaRepo;
 
     public String postNovedad (NovedadDto data, List<MultipartFile> adjuntos ) {
         LocalDate current = LocalDate.now();
@@ -137,7 +141,8 @@ public class NovedadesService {
         List<ArchivoModel> archivos = ArchivoRepo.findByNovedad(novedad_id);
         List<AltaTable> altas = AltaRepo.findByNovedad(novedad_id);
         if(!novedad.getCategoria().equals("ALTA DE LEGAJO")) {
-            LegajosTable leg = LegajoRepo.findById(novedad.getLegajo()).get();
+            EmpresaModel empresa = EmpresaRepo.findById(novedad.getEmpresa_id()).get();
+            LegajosTable leg = LegajoRepo.findByLegajoAndEmpresa(novedad.getLegajo(),empresa.getNombre()).get(0);
             NovLegajo novleg = new NovLegajo(leg, novedad,ausentes,sanciones,personal,licencias, archivos,altas);
             return novleg;
         }
