@@ -27,6 +27,8 @@ public class SessionInterceptor implements HandlerInterceptor {
         }
         
         HttpSession session = request.getSession(false);
+        System.out.println(session.getAttribute("username"));
+        System.out.println(session.getAttribute("username"));
         if (session == null || session.getAttribute("username") == null) {
             System.out.println(uri+" ||| SESSION NOT VALIDATED FALSE ||| ");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Sesión no válida.");
