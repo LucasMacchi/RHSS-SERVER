@@ -16,7 +16,6 @@ public class SessionCheck {
         boolean admin = (Boolean) session.getAttribute("admin");
         boolean administrativo = (Boolean) session.getAttribute("administrativo");
         String empresa_id = (String) session.getAttribute("empresa");
-        System.out.println(username);
         if(username != null) {
             this.admin = admin;
             this.administrativo = administrativo;
