@@ -65,7 +65,7 @@ public class LicenciaService {
     }
 
     public String[] getCategories() {
-        String[] cat = {"ART", "LICENCIA POR ENFERMEDAD", "LICENCIA POR EMBARAZO", "LICENCIA DE VACACIONES", "ATENCION FAMILIAR"};
+        String[] cat = {"ART", "LICENCIA POR ENFERMEDAD", "LICENCIA POR EMBARAZO", "LICENCIA DE VACACIONES", "ATENCION FAMILIAR", "LINCENCIA DE MATRIMONIO"};
         return cat;
     }
 }
