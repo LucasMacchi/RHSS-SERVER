@@ -92,6 +92,15 @@ public class NovedadesService {
         Iterator<NovedadesModel> ite = novedades.iterator();
         while (ite.hasNext()) {
             NovedadesModel nov = ite.next();
+            String legajoName = "NaN";
+            if(nov.getLegajo() != 0) {
+                System.out.println(nov.getCategoria());
+                EmpresaModel empresa = EmpresaRepo.findById(nov.getEmpresa_id()).get();
+                LegajosTable leg = LegajoRepo.findByLegajoAndEmpresa(nov.getLegajo(),empresa.getNombre()).get(0);
+                legajoName = leg.getFullname();
+                System.out.println(legajoName);
+            }
+            nov.personal = legajoName;
             if(!data.categoria.isBlank() && !nov.getCategoria().equals(data.categoria)){
                 continue;
             }
@@ -203,7 +212,7 @@ public class NovedadesService {
         "LICENCIA POR EMBARAZO", "LICENCIA DE VACACIONES","DESPIDO", "DESPIDO UOCRA", "DESPIDO EN PERIODO DE PRUEBA", 
         "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA", "CAMBIO DE LUGAR DE TRABAJO","CAMBIO DE SERVICIO",
         "CAMBIO DE JORNADA","CAMBIO DE CATEGORIA","AUSENTE", "TARDANZA","ALTA DE LEGAJO", "RENUNCIA","ATENCION FAMILIAR",
-        "LINCENCIA DE MATRIMONIO"};
+        "LINCENCIA DE MATRIMONIO","LICENCIA DE FALLECIMIENTO","MEDIO AUSENTE"};
         return cat;
     }
 

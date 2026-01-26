@@ -22,4 +22,6 @@ public class AusenteDto {
     public short legajo;
 
     public boolean justificado;
+
+    public boolean isMed;
 }
