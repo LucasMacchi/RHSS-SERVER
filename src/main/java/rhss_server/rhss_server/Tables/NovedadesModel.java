@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import rhss_server.rhss_server.Utils.dateShorter;
 
 @Entity
@@ -28,6 +29,8 @@ public class NovedadesModel {
     private Boolean cerrado;
     private String email;
     private String telefono;
+    @Transient
+    public String personal;
 
     public NovedadesModel () {
         LocalDate current = LocalDate.now();
