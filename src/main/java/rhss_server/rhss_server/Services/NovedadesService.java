@@ -16,6 +16,7 @@ import rhss_server.rhss_server.DTOs.NovedadFilterDto;
 import rhss_server.rhss_server.Interfaces.IAltaRepo;
 import rhss_server.rhss_server.Interfaces.IArchivoRepo;
 import rhss_server.rhss_server.Interfaces.IAusenteRepo;
+import rhss_server.rhss_server.Interfaces.ICategoriaRepo;
 import rhss_server.rhss_server.Interfaces.IEmpresasRepo;
 import rhss_server.rhss_server.Interfaces.ILegajoRepo;
 import rhss_server.rhss_server.Interfaces.ILicenciaRepo;
@@ -26,6 +27,7 @@ import rhss_server.rhss_server.Interfaces.IUsuarioRepo;
 import rhss_server.rhss_server.Tables.AltaTable;
 import rhss_server.rhss_server.Tables.ArchivoModel;
 import rhss_server.rhss_server.Tables.AusenteModel;
+import rhss_server.rhss_server.Tables.CategoriaTable;
 import rhss_server.rhss_server.Tables.EmpresaModel;
 import rhss_server.rhss_server.Tables.LegajosTable;
 import rhss_server.rhss_server.Tables.LicenciaTable;
@@ -40,6 +42,8 @@ public class NovedadesService {
     
     @Autowired
     private INovedadesRepo NovedadRepo;
+    @Autowired
+    private ICategoriaRepo CategoriaRepo;
     @Autowired
     private IUsuarioRepo UsuarioRepo;
     @Autowired
@@ -207,13 +211,25 @@ public class NovedadesService {
     }
 
 
-    public String[] getCategories () {
+    public List<CategoriaTable> getCategories () {
+        try {
+            List<CategoriaTable> categorias = CategoriaRepo.findAll();
+            return categorias;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404),"Error al traer las categorias.");
+        }
+    }
+
+}
+
+
+/*
+
         String[] cat = {"SUSPENSION", "APERCIBIMIENTO", "ART", "LICENCIA POR ENFERMEDAD", 
         "LICENCIA POR EMBARAZO", "LICENCIA DE VACACIONES","DESPIDO", "DESPIDO UOCRA", "DESPIDO EN PERIODO DE PRUEBA", 
         "SOLICITUD DE CERTIFICADO DE TRABAJO", "ENTREGA DE INDUMENTARIA", "CAMBIO DE LUGAR DE TRABAJO","CAMBIO DE SERVICIO",
         "CAMBIO DE JORNADA","CAMBIO DE CATEGORIA","AUSENTE", "TARDANZA","ALTA DE LEGAJO", "RENUNCIA","ATENCION FAMILIAR",
         "LINCENCIA DE MATRIMONIO","LICENCIA DE FALLECIMIENTO","MEDIO AUSENTE"};
         return cat;
-    }
 
-}
+*/

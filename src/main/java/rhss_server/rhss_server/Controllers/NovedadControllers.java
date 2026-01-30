@@ -24,6 +24,7 @@ import jakarta.validation.Valid;
 import rhss_server.rhss_server.DTOs.NovedadDto;
 import rhss_server.rhss_server.DTOs.NovedadFilterDto;
 import rhss_server.rhss_server.Services.NovedadesService;
+import rhss_server.rhss_server.Tables.CategoriaTable;
 import rhss_server.rhss_server.Tables.NovedadesModel;
 import rhss_server.rhss_server.Utils.NovLegajo;
 
@@ -91,7 +92,7 @@ public class NovedadControllers {
     }
 
     @GetMapping("/categories")
-    public String[] getCategories() {
+    public List<CategoriaTable> getCategories() {
         return this.service.getCategories();
     }
 
