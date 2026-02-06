@@ -96,16 +96,7 @@ public class NovedadesService {
         Iterator<NovedadesModel> ite = novedades.iterator();
         while (ite.hasNext()) {
             NovedadesModel nov = ite.next();
-            String legajoName = "NaN";
-            if(nov.getLegajo() != 0) {
-                System.out.println(nov.getCategoria());
-                EmpresaModel empresa = EmpresaRepo.findById(nov.getEmpresa_id()).get();
-                System.out.println("EMPRESA: "+empresa.getNombre());
-                LegajosTable leg = LegajoRepo.findByLegajoAndEmpresa(nov.getLegajo(),empresa.getNombre()).get(0);
-                legajoName = leg.getFullname();
-                System.out.println(legajoName);
-            }
-            nov.personal = legajoName;
+
             if(!data.categoria.isBlank() && !nov.getCategoria().equals(data.categoria)){
                 continue;
             }
@@ -118,7 +109,16 @@ public class NovedadesService {
             if(nov.getFecha().isBefore(data.fecha_inicio) || nov.getFecha().isAfter(data.fecha_final)){
                 continue;
             }
-
+            String legajoName = "NaN";
+            if(nov.getLegajo() != 0) {
+                System.out.println(nov.getCategoria());
+                EmpresaModel empresa = EmpresaRepo.findById(nov.getEmpresa_id()).get();
+                System.out.println("EMPRESA: "+empresa.getNombre());
+                LegajosTable leg = LegajoRepo.findByLegajoAndEmpresa(nov.getLegajo(),empresa.getNombre()).get(0);
+                legajoName = leg.getFullname();
+                System.out.println(legajoName);
+            }
+            nov.personal = legajoName;
             novedadesF.add(nov);
         }
         
