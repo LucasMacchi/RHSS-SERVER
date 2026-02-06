@@ -100,6 +100,7 @@ public class NovedadesService {
             if(nov.getLegajo() != 0) {
                 System.out.println(nov.getCategoria());
                 EmpresaModel empresa = EmpresaRepo.findById(nov.getEmpresa_id()).get();
+                System.out.println("EMPRESA: "+empresa.getNombre());
                 LegajosTable leg = LegajoRepo.findByLegajoAndEmpresa(nov.getLegajo(),empresa.getNombre()).get(0);
                 legajoName = leg.getFullname();
                 System.out.println(legajoName);
@@ -156,6 +157,7 @@ public class NovedadesService {
         if(!novedad.getCategoria().equals("ALTA DE LEGAJO")) {
             EmpresaModel empresa = EmpresaRepo.findById(novedad.getEmpresa_id()).get();
             LegajosTable leg = LegajoRepo.findByLegajoAndEmpresa(novedad.getLegajo(),empresa.getNombre()).get(0);
+            System.out.println("Legajo: "+leg.getLegajo()+" LEG EMP: "+leg.getEmpresa()+" EMP: "+empresa.getNombre()+" NOV: "+novedad.getEmpresa_id());
             NovLegajo novleg = new NovLegajo(leg, novedad,ausentes,sanciones,personal,licencias, archivos,altas);
             return novleg;
         }
