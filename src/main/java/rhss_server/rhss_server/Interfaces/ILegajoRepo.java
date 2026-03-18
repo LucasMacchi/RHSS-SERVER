@@ -13,6 +13,7 @@ public interface ILegajoRepo extends JpaRepository<LegajosTable, Long>{
 
     List<LegajosTable> findByEmpresa(String empresa);
 
+    @Query(value = "select * from glpi_rhss_legajos where legajo = ?1 AND empresa = ?2;", nativeQuery = true)
     List<LegajosTable> findByLegajoAndEmpresa (long id,String empresa);
 
     @Query(value = "select * from glpi_rhss_legajos where fecha_egreso > NOW();", nativeQuery = true)
