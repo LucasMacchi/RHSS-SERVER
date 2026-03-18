@@ -20,7 +20,8 @@ public class NovedadesModel {
     private String solicitante;
     private long legajo;
     private String causa;
-    private byte empresa_id;
+    @Column(name = "empresa_id")
+    private byte empresaId;
     private long usuario_id;
     @Column(name = "fecha_creacion")
     private LocalDate fecha;
@@ -46,8 +47,8 @@ public class NovedadesModel {
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
-    public void setEmpresa_id(byte empresa_id) {
-        this.empresa_id = empresa_id;
+    public void setEmpresaId(byte empresa_id) {
+        this.empresaId = empresa_id;
     }
     public void setEmail(String email) {
         this.email = email;
@@ -88,8 +89,8 @@ public class NovedadesModel {
     public long getUsuario_id() {
         return usuario_id;
     }
-    public byte getEmpresa_id() {
-        return empresa_id;
+    public byte getEmpresaId() {
+        return empresaId;
     }
     public String getCategoria() {
         return categoria;

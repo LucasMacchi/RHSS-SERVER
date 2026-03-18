@@ -100,7 +100,7 @@ public class DataService {
             NovedadesModel novedad = NovedadRepo.findById(novedadId).get();
             UsuarioModel usuario = UsuarioRepo.findById(novedad.getUsuario_id()).get();
             emailSender.sendEmailActionNovedad(usuario.getEmail(), novedad.getNumero(),
-            novedad.getCategoria(), novedad.getFecha(), "Archivo Cargado", "Concepto: "+concepto,novedadId, novedad.getEmpresa_id());
+            novedad.getCategoria(), novedad.getFecha(), "Archivo Cargado", "Concepto: "+concepto,novedadId, novedad.getEmpresaId());
         } catch (Exception e) {
             System.out.println("ERROR TO SAVE");
             throw new ResponseStatusException(HttpStatusCode.valueOf(404),"No se pudo cargar el archivo.");

@@ -76,9 +76,9 @@ public class NovedadControllers {
         return this.service.getNov(Long.parseLong(id));
     }
 
-    @GetMapping("/legajo/{legajo}")
-    public List<NovedadesModel> getNovByLegajo(@PathVariable String legajo) {
-        return this.service.getLegNov(Long.parseLong(legajo));
+    @GetMapping("/legajo/{legajo}/{empresa}")
+    public List<NovedadesModel> getNovByLegajo(@PathVariable String legajo,@PathVariable byte empresa) {
+        return this.service.getLegNov(Long.parseLong(legajo), empresa);
     }
 
     @GetMapping("/nro/{nro}")

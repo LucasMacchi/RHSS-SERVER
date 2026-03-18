@@ -71,10 +71,10 @@ public class NovedadesService {
         UsuarioModel user = UsuarioRepo.findByUsername(data.solicitante).get();
         novedad.setCausa(data.causa);
         if(data.empresa_id == 0) {
-            novedad.setEmpresa_id(user.getEmpresa_id());
+            novedad.setEmpresaId(user.getEmpresa_id());
         }
         else {
-            novedad.setEmpresa_id(data.empresa_id);
+            novedad.setEmpresaId(data.empresa_id);
         }
         novedad.setFecha_creacion(current);
         if(!data.categoria.equals("ALTA DE LEGAJO")) novedad.setLegajo(data.legajo);
@@ -85,7 +85,7 @@ public class NovedadesService {
         novedad.setTelefono(data.telefono);
         novedad.setEmail(data.email);
         NovedadRepo.save(novedad);
-        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa,novedad.getNovedad_id(), adjuntos, novedad.getEmpresa_id());
+        emailSender.sendEmailNewNovedad(user.getEmail(), novedad.getNumero(), data.categoria, data.legajo, data.causa,novedad.getNovedad_id(), adjuntos, novedad.getEmpresaId());
         return "Novedad creada, numero "+novedad.getNumero();
 
     }
@@ -100,7 +100,7 @@ public class NovedadesService {
             if(!data.categoria.isBlank() && !nov.getCategoria().equals(data.categoria)){
                 continue;
             }
-            if(data.empresa_id == 0 || nov.getEmpresa_id() != data.empresa_id) {
+            if(data.empresa_id == 0 || nov.getEmpresaId() != data.empresa_id) {
                 continue;
             }
             if(!data.solicitante.isBlank() && !nov.getSolicitante().equals(data.solicitante)){
@@ -112,7 +112,7 @@ public class NovedadesService {
             String legajoName = "NaN";
             if(nov.getLegajo() != 0) {
                 System.out.println(nov.getCategoria());
-                EmpresaModel empresa = EmpresaRepo.findById(nov.getEmpresa_id()).get();
+                EmpresaModel empresa = EmpresaRepo.findById(nov.getEmpresaId()).get();
                 System.out.println("EMPRESA: "+empresa.getNombre());
                 LegajosTable leg = LegajoRepo.findByLegajoAndEmpresa(nov.getLegajo(),empresa.getNombre()).get(0);
                 legajoName = leg.getFullname();
@@ -155,9 +155,9 @@ public class NovedadesService {
         List<ArchivoModel> archivos = ArchivoRepo.findByNovedad(novedad_id);
         List<AltaTable> altas = AltaRepo.findByNovedad(novedad_id);
         if(!novedad.getCategoria().equals("ALTA DE LEGAJO")) {
-            EmpresaModel empresa = EmpresaRepo.findById(novedad.getEmpresa_id()).get();
+            EmpresaModel empresa = EmpresaRepo.findById(novedad.getEmpresaId()).get();
             LegajosTable leg = LegajoRepo.findByLegajoAndEmpresa(novedad.getLegajo(),empresa.getNombre()).get(0);
-            System.out.println("Legajo: "+leg.getLegajo()+" LEG EMP: "+leg.getEmpresa()+" EMP: "+empresa.getNombre()+" NOV: "+novedad.getEmpresa_id());
+            System.out.println("Legajo: "+leg.getLegajo()+" LEG EMP: "+leg.getEmpresa()+" EMP: "+empresa.getNombre()+" NOV: "+novedad.getEmpresaId());
             NovLegajo novleg = new NovLegajo(leg, novedad,ausentes,sanciones,personal,licencias, archivos,altas);
             return novleg;
         }
@@ -185,8 +185,8 @@ public class NovedadesService {
     }
 
 
-    public List<NovedadesModel> getLegNov (Long legajo) {
-        List<NovedadesModel> novedades = NovedadRepo.findByLegajo(legajo);
+    public List<NovedadesModel> getLegNov (Long legajo,byte empresa) {
+        List<NovedadesModel> novedades = NovedadRepo.findByLegajoAndEmpresaId(legajo,empresa);
         return novedades;
     }
 
@@ -198,13 +198,13 @@ public class NovedadesService {
                 novedad.setCerrado(false);
                 NovedadRepo.save(novedad);
                 emailSender.sendEmailReopenNovedad(usuario.getEmail(), 
-                novedad.getNumero(),novedad.getCategoria(),novedad.getFecha(), novedad.getEmpresa_id());
+                novedad.getNumero(),novedad.getCategoria(),novedad.getFecha(), novedad.getEmpresaId());
             }
             else {
                 novedad.setCerrado(true);
                 NovedadRepo.save(novedad);
                 emailSender.sendEmailCloseNovedad(usuario.getEmail(), novedad.getNumero(),
-                novedad.getCategoria(),novedad.getFecha(), novedad.getEmpresa_id());
+                novedad.getCategoria(),novedad.getFecha(), novedad.getEmpresaId());
             }
             return "Estado cambiado.";
         } catch (Exception e) {
